@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>DungeonSettlersDelvers.Frieren.MelonLoader</AssemblyName>
+    <RootNamespace>DungeonSettlersDelvers.Frieren.MelonLoader</RootNamespace>
+  </PropertyGroup>
+  <Import Project="../../../GameReferences.props" />
+  <ItemGroup>
+    <ProjectReference Include="$(DelversCoreRoot)/Core/DungeonSettlersDelvers.Core.csproj" />
+    <ProjectReference Include="../../../Frieren/DungeonSettlersDelvers.Frieren.csproj" />
+    <Reference Include="MelonLoader"><HintPath>$(GameLoaderDir)/MelonLoader.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>

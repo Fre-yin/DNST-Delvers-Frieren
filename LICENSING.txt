@@ -1,0 +1,9 @@
+DUNGEON SETTLERS DELVERS: FRIEREN, LICENSE SCOPE
+
+The independently authored mod code, tests, build scripts and original instructions are covered by the MIT License in LICENSE. Preserve its copyright and license notice. The MIT License does not grant rights to Dungeon Settlers, Frieren, game assets, character designs, trademarks or other third-party content.
+
+The Frieren installation packages contain two mod DLLs and four runtime PNGs per loader. The normal and stressed portraits are original pixel work by the project author depicting Frieren. The Archmage and Booklover icons are edited from native Dungeon Settlers icon sources. These statements do not claim ownership of the underlying character, designs or original game icons. See THIRD_PARTY_NOTICES.md for details.
+
+The game, MelonLoader or BepInEx, and Core are obtained separately. The Frieren package contains no game binary, loader binary, generated interop assembly, Core DLL, source icon template, Aseprite working file, world-hair original or saved campaign.
+
+Deutsch: Eigener Code, Tests, Buildskripte und eigene Anleitungen stehen unter MIT. Spiel, Figur, Design, native Iconvorlagen und Marken sind davon ausgenommen. Diese Lizenz erteilt keine Rechte an fremden Inhalten. Core, Spiel und Loader werden separat bezogen.

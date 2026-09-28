@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>DungeonSettlersDelvers.Frieren.BepInEx</AssemblyName>
+    <RootNamespace>DungeonSettlersDelvers.Frieren.BepInEx</RootNamespace>
+  </PropertyGroup>
+  <Import Project="../../../GameReferences.props" />
+  <ItemGroup>
+    <ProjectReference Include="$(DelversCoreRoot)/Core/DungeonSettlersDelvers.Core.csproj" />
+    <ProjectReference Include="../../../Frieren/DungeonSettlersDelvers.Frieren.csproj" />
+    <Reference Include="BepInEx.Core"><HintPath>$(GameLoaderDir)/BepInEx.Core.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="BepInEx.Unity.IL2CPP"><HintPath>$(GameLoaderDir)/BepInEx.Unity.IL2CPP.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="SemanticVersioning"><HintPath>$(GameLoaderDir)/SemanticVersioning.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>DungeonSettlersDelvers.Frieren</AssemblyName>
+    <RootNamespace>FrierenPortrait</RootNamespace>
+  </PropertyGroup>
+  <Import Project="../GameReferences.props" />
+  <ItemGroup>
+    <ProjectReference Include="$(DelversCoreRoot)/Core/DungeonSettlersDelvers.Core.csproj" />
+    <Compile Include="../ProjectRules.cs" Link="ProjectRules.cs" />
+    <Content Include="Assets/*.png" Link="Frieren/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
