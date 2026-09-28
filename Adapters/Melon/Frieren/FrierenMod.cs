@@ -2,7 +2,7 @@ using HarmonyLib;
 using MelonLoader;
 using DungeonSettlersDelvers.Core;
 
-[assembly: MelonInfo(typeof(FrierenPortrait.FrierenMod), "Dungeon Settlers Delvers: Frieren", "0.3.0", "Danny")]
+[assembly: MelonInfo(typeof(FrierenPortrait.FrierenMod), "Dungeon Settlers Delvers: Frieren", "0.3.1", "Danny")]
 [assembly: MelonGame(null, "DungeonSettlers")]
 [assembly: MelonAdditionalDependencies("DungeonSettlersDelvers.Core.MelonLoader")]
 [assembly: HarmonyDontPatchAll]

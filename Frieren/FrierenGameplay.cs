@@ -150,7 +150,7 @@ internal static class FrierenGameplay
         ConfigureInscriptions(candidate, level);
         ConfigureStatsTalentsAndGrowth(helper, candidate, level);
         ConfigureSkillTrees(candidate);
-        ConfigureEquipment(candidate, level);
+        ConfigureEquipment(helper, candidate, level);
         ConfigureRecruitPrice(helper, candidate, guild, level);
     }
 
@@ -230,21 +230,81 @@ internal static class FrierenGameplay
         candidate.SubSkillTrees.Add(SubSkillTreeType.Harmony);
     }
 
-    private static void ConfigureEquipment(RecruitCandidateData candidate, int level)
+    // The (item, count) tuples come from the game's own RecruitHelper.ParseItems
+    // (see FrierenEquipmentRules). A ValueTuple<string, int> created in managed
+    // code and added to the native list crashed BepInEx 6 be.788 (Il2CppInterop
+    // 1.5.3) with an access violation in UnitSpawner.SpawnPlayableUnit when
+    // Frieren spawned as a new unit; MelonLoader was unaffected.
+    private static bool equipmentFormatLogged;
+    private static string nativeItemSample;
+
+    private static void ConfigureEquipment(RecruitHelper helper, RecruitCandidateData candidate, int level)
     {
         var (armor, head, staff) = level <= 2
             ? ("ITEM_ClothArmor", "ITEM_ClothCoif", "ITEM_FireWoodStaff")
             : level <= 4
                 ? ("ITEM_HideArmor", "ITEM_HideHelmet", "ITEM_FireBoneStaff")
                 : ("ITEM_LeatherArmor", "ITEM_LeatherHelmet", "ITEM_FireCarapaceStaff");
-        candidate.InitialEquipments ??= new ItemList();
-        candidate.InitialEquipments.Clear();
-        candidate.InitialEquipments.Add(new Il2CppSystem.ValueTuple<string, int>(armor, 1));
-        candidate.InitialEquipments.Add(new Il2CppSystem.ValueTuple<string, int>(head, 1));
-        candidate.InitialEquipments.Add(new Il2CppSystem.ValueTuple<string, int>(staff, 1));
-        candidate.InitialInventoryItems ??= new ItemList();
-        candidate.InitialInventoryItems.Clear();
+        var keys = new[] { armor, head, staff };
+
+        nativeItemSample ??= FindNativeItemSample();
+        var entries = keys.Select(key => FrierenEquipmentRules.SheetEntry(key, nativeItemSample)).ToArray();
+        ItemList parsed = null;
+        Exception parseError = null;
+        try { parsed = helper?.ParseItems(new Il2CppStringArray(entries)); }
+        catch (Exception ex) { parseError = ex; }
+
+        var read = NativeItemReader.TryRead(parsed, out var items, out var readError);
+        if (read && FrierenEquipmentRules.IsOneOfEach(items, keys))
+        {
+            candidate.InitialEquipments = parsed;
+            if (!equipmentFormatLogged)
+            {
+                equipmentFormatLogged = true;
+                DelversHost.Info("FRIEREN_EQUIPMENT_NATIVE_PARSED entries=" + string.Join("|", entries));
+            }
+        }
+        else if (DelversCoreRuntime.LoaderProfile == "Melon")
+        {
+            // Proven under MelonLoader; kept only as its fallback.
+            candidate.InitialEquipments ??= new ItemList();
+            candidate.InitialEquipments.Clear();
+            foreach (var key in keys)
+                candidate.InitialEquipments.Add(new Il2CppSystem.ValueTuple<string, int>(key, 1));
+        }
+        else if (!equipmentFormatLogged)
+        {
+            // Keep the generator's native equipment rather than risk the crash.
+            equipmentFormatLogged = true;
+            DelversHost.Warning("FRIEREN_EQUIPMENT_KEPT_NATIVE items=" + string.Join(",", keys)
+                + " sent=" + string.Join("|", entries)
+                + " nativeSample=" + (nativeItemSample ?? "none")
+                + " parsed=" + (read ? Describe(items) : "unreadable(" + readError + ")")
+                + " parseError=" + (parseError?.Message ?? "none"));
+        }
+
+        if (candidate.InitialInventoryItems != null) candidate.InitialInventoryItems.Clear();
+        else if (helper != null) candidate.InitialInventoryItems = helper.ParseItems(new Il2CppStringArray(0));
     }
+
+    // A native background row's first starting item confirms the sheet format
+    // at runtime; the parsed result is still verified before it is used.
+    private static string FindNativeItemSample()
+    {
+        var table = DataSheetManager.Instance?._trait?._traitTable;
+        if (table == null) return null;
+        foreach (var trait in table.Values)
+        {
+            var defaults = trait?.DefaultEquipments;
+            if (defaults == null) continue;
+            for (var i = 0; i < defaults.Length; i++)
+                if (defaults[i]?.StartsWith("ITEM_", StringComparison.Ordinal) == true) return defaults[i];
+        }
+        return null;
+    }
+
+    private static string Describe(List<(string Key, int Count)> items)
+        => items.Count == 0 ? "empty" : string.Join("|", items.Select(item => item.Key + "x" + item.Count));
 
     private static void ConfigureRecruitPrice(RecruitHelper helper, RecruitCandidateData candidate,
         bool guild, int level)

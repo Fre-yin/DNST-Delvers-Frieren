@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1: 28.09.2026
+
+- Behoben: Unter BepInEx 6 stürzte das Spiel ab, sobald Frieren als neue Figur erschien, zum Beispiel als Startfigur einer „Eigenen Expedition“. Ihre Startausrüstung legt jetzt das Spiel selbst an. MelonLoader war nicht betroffen.
+- Frieren prüft ihre Startausrüstung, bevor sie übernommen wird. Gelingt das nicht, behält sie die vom Spiel erzeugte Ausrüstung und meldet das im Log.
+- Ein Build aus einem Git-Klon erzeugt jetzt dieselben DLL-Bytes wie das Release.
+
 ## 0.3.0: 28.09.2026
 
 - Frieren besitzt eine Biografie in allen zehn Spielsprachen. Leere Biografien älterer Spielstände werden ergänzt, eigene Texte bleiben erhalten.

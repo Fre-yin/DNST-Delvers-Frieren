@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FrierenPortrait;
 
@@ -50,6 +51,24 @@ public enum ExtendedHotbarCompatibilityStatus
     Compatible,
     UnsupportedVersion,
     UnknownVersion
+}
+
+// A candidate's starting items are native (key, count) tuples built by the
+// game's RecruitHelper.ParseItems from sheet strings "<key>_<count>", for
+// example "ITEM_WoodSword_1" in DS_B.0.4.23; a bare key parses to nothing.
+internal static class FrierenEquipmentRules
+{
+    internal static string SheetEntry(string itemKey, string nativeSample)
+        => nativeSample == null || Regex.IsMatch(nativeSample, @"_\d+$") ? itemKey + "_1" : itemKey;
+
+    internal static bool IsOneOfEach(IReadOnlyList<(string Key, int Count)> items, IReadOnlyList<string> keys)
+    {
+        if (items == null || keys == null || items.Count != keys.Count) return false;
+        for (var i = 0; i < keys.Count; i++)
+            if (!string.Equals(items[i].Key, keys[i], StringComparison.Ordinal) || items[i].Count != 1)
+                return false;
+        return true;
+    }
 }
 
 internal static class FrierenRecruitmentRules

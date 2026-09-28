@@ -14,7 +14,7 @@ pwsh -File .\Build-Release.ps1 -ValidateOnly `
   -BepInExGameDir $BepInExGameDir
 ```
 
-Das Skript prüft die Core- und Frieren-Paketversion, restauriert offline über `NuGet.Config`, baut Frieren und beide Adapter mit einem Projektverweis auf die separate Core-Quelle und führt die Frieren-Regeltests für beide Loader aus. Es prüft die beiden Frieren-DLLs und vier PNGs. Im Release-Build wurden 31 von 31 Frieren-Prüfungen je Loader ohne Buildwarnungen oder Fehler bestanden. `-ValidateOnly` erstellt kein ZIP, installiert nichts und veröffentlicht nichts.
+Das Skript prüft die Core- und Frieren-Paketversion, restauriert offline über `NuGet.Config`, baut Frieren und beide Adapter mit einem Projektverweis auf die separate Core-Quelle und führt die Frieren-Regeltests für beide Loader aus. Es prüft die beiden Frieren-DLLs und vier PNGs. Im Release-Build wurden 39 von 39 Frieren-Prüfungen je Loader ohne Buildwarnungen oder Fehler bestanden. `-ValidateOnly` erstellt kein ZIP, installiert nichts und veröffentlicht nichts.
 
 Frieren enthält keine Core-DLL im Installationspaket. Die PNGs unter `Frieren/Assets/` sind die einzigen mitgelieferten Grafiken. Spiel- und Loader-Referenzen werden lokal über `GameReferences.props` gelesen und nicht verteilt.
 

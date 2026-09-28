@@ -4,7 +4,7 @@
 
 Frieren is an optional character pack for Dungeon Settlers Delvers. You can recruit her as a unique elven mage in Custom Expedition or through the guild. She has her own biography and portraits, the legendary Elven Archmage background, and the Booklover trait. Her story follows her search for rare spells into the awakened dungeon core.
 
-**Version 0.3.0 requires Delvers Core 0.3.0 with API 1.3.0.** Install Core first and use the same loader for both mods. Download `DelversFrieren-0.3.0-MelonLoader.zip` or `DelversFrieren-0.3.0-BepInEx.zip` from [Releases](../../releases), depending on your loader. GitHub's automatically generated source archives cannot be installed as mods.
+**Version 0.3.1 requires Delvers Core 0.3.0 with API 1.3.0.** Install Core first and use the same loader for both mods. Download `DelversFrieren-0.3.1-MelonLoader.zip` or `DelversFrieren-0.3.1-BepInEx.zip` from [Releases](../../releases), depending on your loader. GitHub's automatically generated source archives cannot be installed as mods.
 
 ## Frieren in the game
 
@@ -29,6 +29,6 @@ Extended Hotbar 1.0.1 is optional. Normal campaigns loaded in game with Core, Fr
 
 ## Testing and rights
 
-The separate source package built against Core for MelonLoader and BepInEx with no warnings or errors. It passed 31 checks of Frieren's rules for each loader. Her biography was checked in the recruitment window under MelonLoader. A normal campaign also loaded under BepInEx, where an older blank Frieren biography was filled in. Quickload and further cases involving older saves have not yet been fully checked in game.
+The separate source package built against Core for MelonLoader and BepInEx with no warnings or errors. It passed 39 checks of Frieren's rules for each loader. Under MelonLoader and BepInEx, a new Custom Expedition with Frieren as a starting character and loading an existing campaign with Frieren were checked in game. Her biography was checked in the recruitment window under MelonLoader. A normal campaign also loaded under BepInEx, where an older blank Frieren biography was filled in. Quickload and further cases involving older saves have not yet been fully checked in game.
 
 Original code and documentation are MIT licensed. Frieren, Dungeon Settlers, characters, designs, game art used as a reference, and trademarks are excluded. See [LICENSING.txt](LICENSING.txt) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). This is an unofficial community project and is not made by CanOpener. For source build instructions, see [BUILDING.en.md](BUILDING.en.md).

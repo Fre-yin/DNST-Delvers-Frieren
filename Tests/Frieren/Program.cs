@@ -71,6 +71,27 @@ Check(FrierenFixedTraitRules.OrderedFixedTraits.SequenceEqual(new[] { "AFFECTER_
 Check(FrierenFixedTraitRules.OrderedFixedTraits.Distinct().Count() == FrierenFixedTraitRules.OrderedFixedTraits.Count,
     "Frieren's fixed traits are distinct, as Core registration requires");
 
+Check(FrierenEquipmentRules.SheetEntry("ITEM_ClothArmor", "ITEM_WoodSword_1") == "ITEM_ClothArmor_1",
+    "starting item uses the native sheet format with a count suffix");
+Check(FrierenEquipmentRules.SheetEntry("ITEM_ClothArmor", null) == "ITEM_ClothArmor_1",
+    "starting item falls back to the verified DS_B.0.4.23 sheet format");
+Check(FrierenEquipmentRules.SheetEntry("ITEM_ClothArmor", "ITEM_WoodSword") == "ITEM_ClothArmor",
+    "starting item follows a native sheet format without a count suffix");
+var starterKeys = new[] { "ITEM_ClothArmor", "ITEM_ClothCoif", "ITEM_FireWoodStaff" };
+Check(FrierenEquipmentRules.IsOneOfEach(new[] { ("ITEM_ClothArmor", 1), ("ITEM_ClothCoif", 1),
+        ("ITEM_FireWoodStaff", 1) }, starterKeys),
+    "parsed starting items are accepted when every item appears once in order");
+Check(!FrierenEquipmentRules.IsOneOfEach(Array.Empty<(string, int)>(), starterKeys),
+    "an empty parse result, as from a bare key, is rejected");
+Check(!FrierenEquipmentRules.IsOneOfEach(new[] { ("ITEM_ClothArmor", 1), ("ITEM_ClothCoif", 2),
+        ("ITEM_FireWoodStaff", 1) }, starterKeys),
+    "a parsed starting item with a wrong count is rejected");
+Check(!FrierenEquipmentRules.IsOneOfEach(new[] { ("ITEM_ClothArmor", 1), ("ITEM_WoodSword", 1),
+        ("ITEM_FireWoodStaff", 1) }, starterKeys),
+    "a parsed starting item with a different key is rejected");
+Check(!FrierenEquipmentRules.IsOneOfEach(null, starterKeys),
+    "an unreadable parse result is rejected");
+
 Check(FrierenRecruitmentRules.BookCost(0) == 1, "book cost at gold 0");
 Check(FrierenRecruitmentRules.BookCost(1) == 1, "book cost at gold 1");
 Check(FrierenRecruitmentRules.BookCost(146) == 1, "book cost at gold 146");

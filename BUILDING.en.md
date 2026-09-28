@@ -14,7 +14,7 @@ pwsh -File .\Build-Release.ps1 -ValidateOnly `
   -BepInExGameDir $BepInExGameDir
 ```
 
-The script checks Core and Frieren package versions, restores offline through `NuGet.Config`, builds Frieren and both adapters with a project reference to the separate Core source, and runs the Frieren rule tests for both loaders. It verifies the two Frieren DLLs and four PNGs. The Release build passed 31 of 31 Frieren checks per loader with zero build warnings or errors. `-ValidateOnly` creates no ZIP, installs nothing, and publishes nothing.
+The script checks Core and Frieren package versions, restores offline through `NuGet.Config`, builds Frieren and both adapters with a project reference to the separate Core source, and runs the Frieren rule tests for both loaders. It verifies the two Frieren DLLs and four PNGs. The Release build passed 39 of 39 Frieren checks per loader with zero build warnings or errors. `-ValidateOnly` creates no ZIP, installs nothing, and publishes nothing.
 
 The Frieren installation package contains no Core DLL. The PNGs under `Frieren/Assets/` are the only distributed graphics. Game and loader references are read locally through `GameReferences.props` and are not distributed.
 
