@@ -92,6 +92,15 @@ Check(!FrierenEquipmentRules.IsOneOfEach(new[] { ("ITEM_ClothArmor", 1), ("ITEM_
 Check(!FrierenEquipmentRules.IsOneOfEach(null, starterKeys),
     "an unreadable parse result is rejected");
 
+Check(FrierenBookloverRules.IsPossibleBookRead("ITEM_TechBook"),
+    "a used technique book is marked for the Booklover reward");
+Check(!FrierenBookloverRules.IsPossibleBookRead("ITEM_Bread"),
+    "a used non-book item is never marked for the Booklover reward");
+Check(!FrierenBookloverRules.IsPossibleBookRead("item_techbook"),
+    "the technique book key is matched exactly");
+Check(FrierenBookloverRules.IsPossibleBookRead(null),
+    "an unknown used item falls back to the carried-stack check");
+
 Check(FrierenRecruitmentRules.BookCost(0) == 1, "book cost at gold 0");
 Check(FrierenRecruitmentRules.BookCost(1) == 1, "book cost at gold 1");
 Check(FrierenRecruitmentRules.BookCost(146) == 1, "book cost at gold 146");

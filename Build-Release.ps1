@@ -15,8 +15,8 @@ if (!(Test-Path -LiteralPath (Join-Path $core 'Core\DungeonSettlersDelvers.Core.
 }
 $coreProps = [xml](Get-Content -LiteralPath (Join-Path $core 'Directory.Build.props') -Raw)
 $frierenProps = [xml](Get-Content -LiteralPath (Join-Path $root 'Directory.Build.props') -Raw)
-if ($coreProps.Project.PropertyGroup.Version -ne '0.3.0' -or $frierenProps.Project.PropertyGroup.Version -ne '0.3.1') {
-    throw 'Frieren 0.3.1 requires the Core 0.3.0 source checkout.'
+if ($coreProps.Project.PropertyGroup.Version -ne '0.3.0' -or $frierenProps.Project.PropertyGroup.Version -ne '0.3.2') {
+    throw 'Frieren 0.3.2 requires the Core 0.3.0 source checkout.'
 }
 $nuget = Join-Path $root 'NuGet.Config'
 $assets = @('Frieren_Normal.png','Frieren_Stress.png','Elfische_Erzmagierin.png','Booklover.png')

@@ -71,6 +71,17 @@ internal static class FrierenEquipmentRules
     }
 }
 
+// Every item a Booklover uses reaches the native success iterator. Only a
+// technique book may be marked for the reward; an unknown item still gets the
+// later carried-stack check.
+internal static class FrierenBookloverRules
+{
+    internal const string BookKey = "ITEM_TechBook";
+
+    internal static bool IsPossibleBookRead(string usedItemKey)
+        => usedItemKey == null || string.Equals(usedItemKey, BookKey, StringComparison.Ordinal);
+}
+
 internal static class FrierenRecruitmentRules
 {
     internal static int BookCost(int gold)

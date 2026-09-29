@@ -4,7 +4,7 @@
 
 Frieren ist ein zusätzliches Charakterpaket für Dungeon Settlers Delvers. Du kannst sie im Modus „Eigene Expedition“ und über die Gilde als einzigartige Elfenmagierin rekrutieren. Sie hat eine eigene Biografie, Porträts, den legendären Hintergrund „Elfische Erzmagierin“ und die Eigenschaft „Bücherwurm“. Ihre Geschichte verbindet die Suche nach seltenen Zaubern mit einer Expedition zum erwachten Dungeonkern.
 
-**Version 0.3.1 benötigt Delvers Core 0.3.0 mit API 1.3.0.** Installiere Core zuerst und verwende für beide Mods denselben Loader. Unter [Releases](../../releases) findest du `DelversFrieren-0.3.1-MelonLoader.zip` und `DelversFrieren-0.3.1-BepInEx.zip`. Lade nur das Paket für deinen Loader herunter. Die automatisch von GitHub erzeugten Quellarchive lassen sich nicht als Mod installieren.
+**Version 0.3.2 benötigt Delvers Core 0.3.0 mit API 1.3.0.** Installiere Core zuerst und verwende für beide Mods denselben Loader. Unter [Releases](../../releases) findest du `DelversFrieren-0.3.2-MelonLoader.zip` und `DelversFrieren-0.3.2-BepInEx.zip`. Lade nur das Paket für deinen Loader herunter. Die automatisch von GitHub erzeugten Quellarchive lassen sich nicht als Mod installieren.
 
 ## Frieren im Spiel
 
@@ -29,6 +29,6 @@ Extended Hotbar 1.0.1 ist optional. Normale Kampagnen wurden mit Core, Frieren u
 
 ## Prüfung und Rechte
 
-Die getrennte Quellfassung wurde mit Core für MelonLoader und BepInEx ohne Warnungen oder Fehler gebaut. Je Loader liefen 39 Prüfungen für Frierens Regeln. Unter MelonLoader und BepInEx wurden eine neue „Eigene Expedition“ mit Frieren als Startfigur und das Laden einer bestehenden Kampagne mit Frieren im Spiel geprüft. Ihre Biografie wurde im Rekrutierungsfenster unter MelonLoader geprüft. Unter BepInEx ließ sich eine normale Kampagne laden; dabei wurde auch eine ältere, leere Frieren Biografie ergänzt. Quickload und weitere Fälle bei der Übernahme älterer Spielstände sind noch nicht vollständig im Spiel geprüft.
+Die getrennte Quellfassung wurde mit Core für MelonLoader und BepInEx ohne Warnungen oder Fehler gebaut. Je Loader liefen 43 Prüfungen für Frierens Regeln. Unter MelonLoader und BepInEx wurden eine neue „Eigene Expedition“ mit Frieren als Startfigur und das Laden einer bestehenden Kampagne mit Frieren im Spiel geprüft. Ihre Biografie wurde im Rekrutierungsfenster unter MelonLoader geprüft. Unter BepInEx ließ sich eine normale Kampagne laden; dabei wurde auch eine ältere, leere Frieren Biografie ergänzt. Unter beiden Loadern hat außerdem eine Figur mit „Bücherwurm“ ein Technikbuch gelesen und einen Hartkeks gegessen, beides ohne Warnung im Log. Quickload und weitere Fälle bei der Übernahme älterer Spielstände sind noch nicht vollständig im Spiel geprüft.
 
 Eigener Code und eigene Anleitungen stehen unter MIT. Frieren, Dungeon Settlers, Figuren, Designs, Vorlagen aus dem Spiel und Marken sind davon ausgenommen. Einzelheiten stehen in [LICENSING.txt](LICENSING.txt) und [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Dies ist ein inoffizielles Communityprojekt und stammt nicht von CanOpener. Eine Anleitung zum Bauen der Quellen steht in [BUILDING.md](BUILDING.md).

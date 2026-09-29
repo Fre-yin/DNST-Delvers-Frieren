@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2: 29.09.2026
+
+- Behoben: Benutzte eine Figur mit „Bücherwurm“ ein anderes Item als ein Technikbuch, zum Beispiel Essen, schrieb Frieren eine unnötige Warnung ins Log. Jetzt wird nur ein benutztes Technikbuch für die Belohnung vorgemerkt. Am Spielverhalten ändert sich nichts.
+
 ## 0.3.1: 28.09.2026
 
 - Behoben: Unter BepInEx 6 stürzte das Spiel ab, sobald Frieren als neue Figur erschien, zum Beispiel als Startfigur einer „Eigenen Expedition“. Ihre Startausrüstung legt jetzt das Spiel selbst an. MelonLoader war nicht betroffen.

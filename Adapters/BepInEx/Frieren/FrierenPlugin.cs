@@ -10,7 +10,7 @@ using FrierenPortrait;
 
 namespace DungeonSettlersDelvers.Frieren.BepInEx;
 
-[BepInPlugin(Id, "Dungeon Settlers Delvers: Frieren", "0.3.1")]
+[BepInPlugin(Id, "Dungeon Settlers Delvers: Frieren", "0.3.2")]
 [BepInProcess("DungeonSettlers.exe")]
 [BepInDependency(DelversCoreRuntime.BepInExPluginId, "0.3.0")]
 public sealed class FrierenPlugin : BasePlugin

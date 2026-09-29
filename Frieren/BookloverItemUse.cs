@@ -73,7 +73,7 @@ namespace FrierenPortrait;
 // Booklover reward runs only after that native consumption has succeeded.
 internal static class BookloverItemUse
 {
-    internal const string BookKey = "ITEM_TechBook";
+    internal const string BookKey = FrierenBookloverRules.BookKey;
     internal const string NativeReadSkill = "SKILL_DevelopersLetter";
     // Authorization is created only by the native successful consumption apply.
     // Manual drop/store events use the same later removal event, so they must
@@ -98,13 +98,15 @@ internal static class BookloverItemUse
         book.UseSkill = NativeReadSkill;
     }
 
-    internal static void MarkReadApply(IExecutionData current)
+    internal static void MarkReadApply(IExecutionData current, string usedItemKey)
     {
+        // Every item a Booklover uses (food, potions, books) reaches this iterator.
+        if (!FrierenBookloverRules.IsPossibleBookRead(usedItemKey)) return;
         var data = current?.TryCast<CustomExecutionData>()?.Data?.TryCast<RemoveCarryItemApplyData>();
         if (data?.Owner == null || data.Amount != 1 || !Booklover.HasTrait(data.Owner)) return;
         PruneExpiredReadMarks();
         MarkedReadApplies[data.Pointer] = (data, Time.realtimeSinceStartup + ReadApplyMarkLifetimeSeconds);
-        DelversHost.Info("BOOKLOVER_READ_APPLY_MARKED");
+        DelversHost.Info("BOOKLOVER_READ_APPLY_MARKED item=" + (usedItemKey ?? "unknown"));
     }
 
     internal static void OnNativeApply(IApplyData data)
@@ -262,7 +264,7 @@ internal static class BookloverReadApplyMarkPatch
         if (!__result) return;
         try
         {
-            BookloverItemUse.MarkReadApply(__instance.__2__current);
+            BookloverItemUse.MarkReadApply(__instance.__2__current, __instance.context?.UseItem?.Key);
         }
         catch (Exception ex)
         {
