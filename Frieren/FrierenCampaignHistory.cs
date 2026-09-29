@@ -1,17 +1,5 @@
 using HarmonyLib;
 using Il2CppInterop.Runtime;
-#if BEPINEX
-using global::Refactor;
-#else
-using Il2CppRefactor;
-#endif
-#if BEPINEX
-using global::Refactor.Main;
-using global::Refactor.Main.Event;
-#else
-using Il2CppRefactor.Main;
-using Il2CppRefactor.Main.Event;
-#endif
 using UnityEngine;
 
 namespace FrierenPortrait;
@@ -80,11 +68,7 @@ internal static class FrierenCampaignHistory
 }
 
 [HarmonyPatch(typeof(RecruitHelper), nameof(RecruitHelper.CreateRecruitCandidate),
-#if BEPINEX
-    new[] { typeof(global::Util.Sheet.ClanRankTableData), typeof(Il2CppSystem.Collections.Generic.HashSet<string>),
-#else
-    new[] { typeof(Il2CppUtil.Sheet.ClanRankTableData), typeof(Il2CppSystem.Collections.Generic.HashSet<string>),
-#endif
+    new[] { typeof(ClanRankTableData), typeof(Il2CppSystem.Collections.Generic.HashSet<string>),
         typeof(Il2CppSystem.Collections.Generic.HashSet<string>) })]
 internal static class FrierenHistoryCandidatePatch
 {

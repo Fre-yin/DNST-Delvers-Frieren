@@ -1,6 +1,6 @@
-DUNGEON SETTLERS DELVERS: FRIEREN 0.3.2
+DUNGEON SETTLERS DELVERS: FRIEREN 0.4.0
 
-Installiere zuerst Delvers Core 0.3.0 mit Core API 1.3.0. Frieren benötigt denselben Loader wie Core. Sichere deine Spielstände vor dem Update und entferne die alte DungeonSettlersFrierenPortrait.dll aus Mods, UserLibs oder BepInEx/plugins.
+Installiere zuerst Delvers Core 0.4.0 mit Core API 1.4.0. Frieren benötigt denselben Loader wie Core. Sichere deine Spielstände vor dem Update und entferne die alte DungeonSettlersFrierenPortrait.dll aus Mods, UserLibs oder BepInEx/plugins. Ältere Spielstände werden beim Laden umgestellt und lassen sich nach dem Speichern nicht mehr mit Frieren 0.3.x laden.
 
 MelonLoader 0.7.3:
 - Mods/DungeonSettlersDelvers.Frieren.MelonLoader.dll

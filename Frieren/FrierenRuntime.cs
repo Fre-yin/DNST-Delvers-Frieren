@@ -1,24 +1,4 @@
 using HarmonyLib;
-#if BEPINEX
-using global::Refactor;
-#else
-using Il2CppRefactor;
-#endif
-#if BEPINEX
-using global::Refactor.Util;
-#else
-using Il2CppRefactor.Util;
-#endif
-#if BEPINEX
-using global::Util;
-#else
-using Il2CppUtil;
-#endif
-#if BEPINEX
-using global::Util.Sheet;
-#else
-using Il2CppUtil.Sheet;
-#endif
 using UnityEngine;
 
 namespace FrierenPortrait;
@@ -41,12 +21,13 @@ public sealed class FrierenRuntime
     private IDisposable loadIntegration;
     private IDisposable uniqueCandidateRegistration;
     private IDisposable fixedTraitRegistration;
+    private IDisposable saveKeyRenames;
 
     public void Initialize(HarmonyLib.Harmony harmony)
     {
         if (!DelversCoreRuntime.IsReady
-            || !DelversCoreRuntime.SupportsApi(DelversCoreRuntime.MinimumApiVersionForLoadIntegrations))
-            throw new InvalidOperationException("Frieren requires Dungeon Settlers Delvers Core API 1.3.0 or later in API 1.x.");
+            || !DelversCoreRuntime.SupportsApi(DelversCoreRuntime.MinimumApiVersionForNativeValueLists))
+            throw new InvalidOperationException("Frieren requires Dungeon Settlers Delvers Core API 1.4.0 or later in API 1.x.");
         if (Instance != null)
             throw new InvalidOperationException("A Frieren runtime instance is already active; the second loader entry was rejected before registration.");
         LegacyFrierenConflict.ThrowIfPresent();
@@ -65,6 +46,8 @@ public sealed class FrierenRuntime
                 "frieren", IsUniqueCandidate);
             fixedTraitRegistration = DelversCoreRuntime.RegisterFixedTraits(
                 "frieren", FrierenIds.ProfileKey, FrierenFixedTraitRules.OrderedFixedTraits);
+            // Saves from Frieren 0.3.x still hold the old IDs; Core renames them on load.
+            saveKeyRenames = DelversCoreRuntime.RegisterSaveKeyRenames("frieren", FrierenLegacyIds.SaveRenames);
             FrierenBootstrap.Initialize(harmony);
             enabled = true;
             DelversHost.Info($"Frieren portrait hooks ready; {FrierenBootstrap.SupportedBuilds} verified.");
@@ -73,6 +56,8 @@ public sealed class FrierenRuntime
         {
             Fail(ex);
             try { harmony.UnpatchSelf(); } catch { }
+            saveKeyRenames?.Dispose();
+            saveKeyRenames = null;
             fixedTraitRegistration?.Dispose();
             fixedTraitRegistration = null;
             loadIntegration?.Dispose();
@@ -270,6 +255,8 @@ public sealed class FrierenRuntime
 
     public void Shutdown()
     {
+        saveKeyRenames?.Dispose();
+        saveKeyRenames = null;
         fixedTraitRegistration?.Dispose();
         fixedTraitRegistration = null;
         loadIntegration?.Dispose();

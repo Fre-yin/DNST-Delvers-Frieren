@@ -1,24 +1,4 @@
 using Il2CppInterop.Runtime;
-#if BEPINEX
-using global::Refactor;
-#else
-using Il2CppRefactor;
-#endif
-#if BEPINEX
-using global::Refactor.Component;
-#else
-using Il2CppRefactor.Component;
-#endif
-#if BEPINEX
-using global::Refactor.Main;
-#else
-using Il2CppRefactor.Main;
-#endif
-#if BEPINEX
-using SavedComponents = Il2CppSystem.Collections.Generic.List<global::Refactor.ComponentSaveData>;
-#else
-using SavedComponents = Il2CppSystem.Collections.Generic.List<Il2CppRefactor.ComponentSaveData>;
-#endif
 
 namespace FrierenPortrait;
 
@@ -73,9 +53,10 @@ internal static class FrierenSaveMigrations
     {
         try
         {
-            if (!FrierenNameMigration.Normalize(profile, out var previousName)) return;
+            if (!FrierenNameMigration.Normalize(profile, out _)) return;
+            // The old key is never logged: players share logs, and it carries a personal name.
             DelversHost.Info(
-                $"FRIEREN_NAME_MIGRATED profile={FrierenIds.ProfileKey} from={previousName} to={FrierenGameplay.NameKey}");
+                $"FRIEREN_NAME_MIGRATED profile={FrierenIds.ProfileKey} from=legacy-name-key to={FrierenGameplay.NameKey}");
         }
         catch (Exception ex)
         {

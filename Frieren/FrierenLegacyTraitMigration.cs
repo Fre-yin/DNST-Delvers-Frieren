@@ -1,29 +1,4 @@
 using Il2CppInterop.Runtime;
-#if BEPINEX
-using global::Refactor;
-#else
-using Il2CppRefactor;
-#endif
-#if BEPINEX
-using global::Refactor.Component;
-#else
-using Il2CppRefactor.Component;
-#endif
-#if BEPINEX
-using global::Refactor.Main;
-#else
-using Il2CppRefactor.Main;
-#endif
-#if BEPINEX
-using ComponentSaveList = Il2CppSystem.Collections.Generic.List<global::Refactor.ComponentSaveData>;
-#else
-using ComponentSaveList = Il2CppSystem.Collections.Generic.List<Il2CppRefactor.ComponentSaveData>;
-#endif
-#if BEPINEX
-using HolderList = Il2CppSystem.Collections.Generic.List<global::Refactor.Component.AffecterHolder>;
-#else
-using HolderList = Il2CppSystem.Collections.Generic.List<Il2CppRefactor.Component.AffecterHolder>;
-#endif
 
 namespace FrierenPortrait;
 
@@ -77,7 +52,7 @@ internal static class FrierenLegacyTraitMigration
         // leave the load data half-migrated.
         var migrated = new HolderList();
         for (var i = 0; i < holders.Count; i++)
-            if (holders[i]?.Key != LegacyBackgroundKey) migrated.Add(holders[i]);
+            if (holders[i]?.Key != LegacyBackgroundKey) DelversNativeList.AddValue(migrated, holders[i]);
         affecters.AffecterHolders = migrated;
         return mageCount;
     }

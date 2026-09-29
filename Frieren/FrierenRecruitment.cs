@@ -1,29 +1,4 @@
 using HarmonyLib;
-#if BEPINEX
-using global::Refactor;
-#else
-using Il2CppRefactor;
-#endif
-#if BEPINEX
-using global::Refactor.Main.Event;
-#else
-using Il2CppRefactor.Main.Event;
-#endif
-#if BEPINEX
-using global::Refactor.Map;
-#else
-using Il2CppRefactor.Map;
-#endif
-#if BEPINEX
-using global::Refactor.UI;
-#else
-using Il2CppRefactor.UI;
-#endif
-#if BEPINEX
-using global::TMPro;
-#else
-using Il2CppTMPro;
-#endif
 using UnityEngine;
 using UnityEngine.UI;
 

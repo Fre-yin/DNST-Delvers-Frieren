@@ -10,9 +10,9 @@ using FrierenPortrait;
 
 namespace DungeonSettlersDelvers.Frieren.BepInEx;
 
-[BepInPlugin(Id, "Dungeon Settlers Delvers: Frieren", "0.3.2")]
+[BepInPlugin(Id, "Dungeon Settlers Delvers: Frieren", "0.4.0")]
 [BepInProcess("DungeonSettlers.exe")]
-[BepInDependency(DelversCoreRuntime.BepInExPluginId, "0.3.0")]
+[BepInDependency(DelversCoreRuntime.BepInExPluginId, "0.4.0")]
 public sealed class FrierenPlugin : BasePlugin
 {
     internal const string Id = "fre-yin.dungeonsettlers.delvers.frieren";
@@ -25,9 +25,9 @@ public sealed class FrierenPlugin : BasePlugin
     {
         if (ownsRuntime) return;
         if (!DelversCoreRuntime.IsReady || DelversCoreRuntime.LoaderProfile != "BepInEx"
-            || !DelversCoreRuntime.SupportsApi(DelversCoreRuntime.MinimumApiVersionForLoadIntegrations))
+            || !DelversCoreRuntime.SupportsApi(DelversCoreRuntime.MinimumApiVersionForNativeValueLists))
         {
-            Log.LogError("FRIEREN_DISABLED: Core API 1.3.0 or later in API 1.x must initialize first. No Frieren patches were applied.");
+            Log.LogError("FRIEREN_DISABLED: Core API 1.4.0 or later in API 1.x must initialize first. No Frieren patches were applied.");
             return;
         }
 

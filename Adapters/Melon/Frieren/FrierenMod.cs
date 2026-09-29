@@ -2,7 +2,7 @@ using HarmonyLib;
 using MelonLoader;
 using DungeonSettlersDelvers.Core;
 
-[assembly: MelonInfo(typeof(FrierenPortrait.FrierenMod), "Dungeon Settlers Delvers: Frieren", "0.3.2", "Danny")]
+[assembly: MelonInfo(typeof(FrierenPortrait.FrierenMod), "Dungeon Settlers Delvers: Frieren", "0.4.0", "Fre-yin")]
 [assembly: MelonGame(null, "DungeonSettlers")]
 [assembly: MelonAdditionalDependencies("DungeonSettlersDelvers.Core.MelonLoader")]
 [assembly: HarmonyDontPatchAll]
@@ -19,9 +19,9 @@ public sealed class FrierenMod : MelonMod
     {
         if (ownsRuntime) return;
         if (!DelversCoreRuntime.IsReady || DelversCoreRuntime.LoaderProfile != "Melon"
-            || !DelversCoreRuntime.SupportsApi(DelversCoreRuntime.MinimumApiVersionForLoadIntegrations))
+            || !DelversCoreRuntime.SupportsApi(DelversCoreRuntime.MinimumApiVersionForNativeValueLists))
         {
-            LoggerInstance.Error("FRIEREN_DISABLED: Core API 1.3.0 or later in API 1.x must initialize first. No Frieren patches were applied.");
+            LoggerInstance.Error("FRIEREN_DISABLED: Core API 1.4.0 or later in API 1.x must initialize first. No Frieren patches were applied.");
             return;
         }
         runtime = new FrierenRuntime();

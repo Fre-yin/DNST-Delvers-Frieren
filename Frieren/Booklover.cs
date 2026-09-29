@@ -1,35 +1,5 @@
 using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
-#if BEPINEX
-using global::Refactor;
-#else
-using Il2CppRefactor;
-#endif
-#if BEPINEX
-using global::Refactor.Addressable;
-#else
-using Il2CppRefactor.Addressable;
-#endif
-#if BEPINEX
-using global::Refactor.Component;
-#else
-using Il2CppRefactor.Component;
-#endif
-#if BEPINEX
-using global::Refactor.Main;
-#else
-using Il2CppRefactor.Main;
-#endif
-#if BEPINEX
-using global::Refactor.Util;
-#else
-using Il2CppRefactor.Util;
-#endif
-#if BEPINEX
-using global::Util.Sheet;
-#else
-using Il2CppUtil.Sheet;
-#endif
 using UnityEngine;
 
 namespace FrierenPortrait;
@@ -37,7 +7,7 @@ namespace FrierenPortrait;
 internal static class Booklover
 {
     internal const string TraitKey = FrierenFixedTraitRules.BookloverTraitKey;
-    internal const string MoodKey = "AFFECTER_DannyBookloverMood";
+    internal const string MoodKey = FrierenSaveIds.BookloverMoodKey;
     internal const int MoodDurationSeconds = 20 * 60;
 
     // Ordinary individual traits are selected from the race row in TraitSheet.

@@ -11,12 +11,12 @@ if (-not $ValidateOnly) { throw 'Use -ValidateOnly. Release archives are assembl
 $root = $PSScriptRoot
 $core = [IO.Path]::GetFullPath($CoreSourceDir)
 if (!(Test-Path -LiteralPath (Join-Path $core 'Core\DungeonSettlersDelvers.Core.csproj') -PathType Leaf)) {
-    throw 'Core 0.3.0 source checkout is required. Pass its root with -CoreSourceDir.'
+    throw 'Core 0.4.0 source checkout is required. Pass its root with -CoreSourceDir.'
 }
 $coreProps = [xml](Get-Content -LiteralPath (Join-Path $core 'Directory.Build.props') -Raw)
 $frierenProps = [xml](Get-Content -LiteralPath (Join-Path $root 'Directory.Build.props') -Raw)
-if ($coreProps.Project.PropertyGroup.Version -ne '0.3.0' -or $frierenProps.Project.PropertyGroup.Version -ne '0.3.2') {
-    throw 'Frieren 0.3.2 requires the Core 0.3.0 source checkout.'
+if ($coreProps.Project.PropertyGroup.Version -ne '0.4.0' -or $frierenProps.Project.PropertyGroup.Version -ne '0.4.0') {
+    throw 'Frieren 0.4.0 requires the Core 0.4.0 source checkout.'
 }
 $nuget = Join-Path $root 'NuGet.Config'
 $assets = @('Frieren_Normal.png','Frieren_Stress.png','Elfische_Erzmagierin.png','Booklover.png')

@@ -1,14 +1,4 @@
 using Il2CppInterop.Runtime;
-#if BEPINEX
-using global::Refactor;
-#else
-using Il2CppRefactor;
-#endif
-#if BEPINEX
-using global::Refactor.Component;
-#else
-using Il2CppRefactor.Component;
-#endif
 
 namespace FrierenPortrait;
 

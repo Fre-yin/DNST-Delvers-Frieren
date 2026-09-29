@@ -1,29 +1,9 @@
-#if BEPINEX
-using global::Refactor;
-#else
-using Il2CppRefactor;
-#endif
-#if BEPINEX
-using global::Refactor.Util;
-#else
-using Il2CppRefactor.Util;
-#endif
-#if BEPINEX
-using global::Util;
-#else
-using Il2CppUtil;
-#endif
-#if BEPINEX
-using global::Util.Sheet;
-#else
-using Il2CppUtil.Sheet;
-#endif
 
 namespace FrierenPortrait;
 
 internal static class FrierenIds
 {
-    internal const string PortraitKey = "Danny_Frieren_ElfFemale";
+    internal const string PortraitKey = FrierenSaveIds.PortraitKey;
     // Keep the original gameplay/profile template and serialized custom ID.
     // Only the head hair and eye color come from the user's "Def Not Frieren".
     internal const string TemplateKey = "UNITVISUAL_ElfSlimUnisex_10";

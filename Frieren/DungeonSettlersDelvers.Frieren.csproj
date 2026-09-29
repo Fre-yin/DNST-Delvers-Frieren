@@ -6,6 +6,8 @@
   <Import Project="../GameReferences.props" />
   <ItemGroup>
     <ProjectReference Include="$(DelversCoreRoot)/Core/DungeonSettlersDelvers.Core.csproj" />
+    <!-- Lets the private in-game self-test reach internal members; no runtime cost. -->
+    <InternalsVisibleTo Include="DungeonSettlersDelvers.SelfTest" />
     <Compile Include="../ProjectRules.cs" Link="ProjectRules.cs" />
     <Content Include="Assets/*.png" Link="Frieren/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

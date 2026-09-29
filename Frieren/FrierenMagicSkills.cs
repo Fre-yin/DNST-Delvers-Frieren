@@ -1,35 +1,5 @@
 using HarmonyLib;
 using Il2CppInterop.Runtime;
-#if BEPINEX
-using global::Refactor;
-#else
-using Il2CppRefactor;
-#endif
-#if BEPINEX
-using global::Refactor.Component;
-#else
-using Il2CppRefactor.Component;
-#endif
-#if BEPINEX
-using global::Refactor.Main;
-#else
-using Il2CppRefactor.Main;
-#endif
-#if BEPINEX
-using global::Refactor.Main.Event;
-#else
-using Il2CppRefactor.Main.Event;
-#endif
-#if BEPINEX
-using global::Refactor.Main.Processor;
-#else
-using Il2CppRefactor.Main.Processor;
-#endif
-#if BEPINEX
-using global::Refactor.Map;
-#else
-using Il2CppRefactor.Map;
-#endif
 using UnityEngine;
 
 namespace FrierenPortrait;

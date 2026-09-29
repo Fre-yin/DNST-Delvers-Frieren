@@ -1,38 +1,24 @@
 using HarmonyLib;
-#if BEPINEX
-using global::Refactor.Setting;
-#else
-using Il2CppRefactor.Setting;
-#endif
-#if BEPINEX
-using global::Refactor.Util;
-#else
-using Il2CppRefactor.Util;
-#endif
-#if BEPINEX
-using global::Util.Sheet;
-#else
-using Il2CppUtil.Sheet;
-#endif
 
 namespace FrierenPortrait;
 
 internal static class FrierenLocalization
 {
-    internal const string BiographyKey = "TEXTKEY_UNITBIO_DannyFrieren";
+    internal const string BiographyKey = FrierenSaveIds.BiographyKey;
     internal const string BiographyNameFormat = "<color=#E4DFDB>{0}</color>";
-    internal const string TraitNameKey = "TEXTKEY_AFFECTER_DannyElfArchmage_NAME";
-    internal const string TraitMasteryKey = "TEXTKEY_AFFECTER_DannyElfArchmage_MASTERY";
-    internal const string TraitManaReserveKey = "TEXTKEY_AFFECTER_DannyElfArchmage_MANA_RESERVE";
-    internal const string TraitPracticedMageKey = "TEXTKEY_AFFECTER_DannyElfArchmage_PRACTICED_MAGE";
-    internal const string TraitDescriptionKey = "TEXTKEY_AFFECTER_DannyElfArchmage_DESC";
-    internal const string TraitFlavorKey = "TEXTKEY_AFFECTER_DannyElfArchmage_FLAVOR";
-    internal const string BookloverNameKey = "TEXTKEY_AFFECTER_DannyBooklover_NAME";
-    internal const string BookloverDescKey = "TEXTKEY_AFFECTER_DannyBooklover_DESC";
-    internal const string BookloverFlavorKey = "TEXTKEY_AFFECTER_DannyBooklover_FLAVOR";
-    internal const string BookloverMoodNameKey = "TEXTKEY_AFFECTER_DannyBookloverMood_NAME";
-    internal const string BookloverMoodDescKey = "TEXTKEY_AFFECTER_DannyBookloverMood_DESC";
-    internal const string BookloverMoodFlavorKey = "TEXTKEY_AFFECTER_DannyBookloverMood_FLAVOR";
+    // Text keys are looked up at runtime and never saved, so they need no legacy mapping.
+    internal const string TraitNameKey = "TEXTKEY_AFFECTER_DelversElfArchmage_NAME";
+    internal const string TraitMasteryKey = "TEXTKEY_AFFECTER_DelversElfArchmage_MASTERY";
+    internal const string TraitManaReserveKey = "TEXTKEY_AFFECTER_DelversElfArchmage_MANA_RESERVE";
+    internal const string TraitPracticedMageKey = "TEXTKEY_AFFECTER_DelversElfArchmage_PRACTICED_MAGE";
+    internal const string TraitDescriptionKey = "TEXTKEY_AFFECTER_DelversElfArchmage_DESC";
+    internal const string TraitFlavorKey = "TEXTKEY_AFFECTER_DelversElfArchmage_FLAVOR";
+    internal const string BookloverNameKey = "TEXTKEY_AFFECTER_DelversBooklover_NAME";
+    internal const string BookloverDescKey = "TEXTKEY_AFFECTER_DelversBooklover_DESC";
+    internal const string BookloverFlavorKey = "TEXTKEY_AFFECTER_DelversBooklover_FLAVOR";
+    internal const string BookloverMoodNameKey = "TEXTKEY_AFFECTER_DelversBookloverMood_NAME";
+    internal const string BookloverMoodDescKey = "TEXTKEY_AFFECTER_DelversBookloverMood_DESC";
+    internal const string BookloverMoodFlavorKey = "TEXTKEY_AFFECTER_DelversBookloverMood_FLAVOR";
 
     private static readonly TextKeyTableData[] Rows =
     {

@@ -66,10 +66,31 @@ Check(CompatibilityModIdentity.ClassifyExtendedHotbar("OtherAssembly", "Other Mo
     == ExtendedHotbarCompatibilityStatus.NotDetected, "unrelated mod is not version-classified as Hotbar");
 
 Check(FrierenFixedTraitRules.OrderedFixedTraits.SequenceEqual(new[] { "AFFECTER_Elf",
-        FrierenUniqueCandidateRules.BackgroundTraitKey, "AFFECTER_DannyBooklover" }),
+        "AFFECTER_DelversElfArchmage", "AFFECTER_DelversBooklover" }),
     "Frieren's fixed traits for Core restore: race, archmage background, Booklover in saved order");
 Check(FrierenFixedTraitRules.OrderedFixedTraits.Distinct().Count() == FrierenFixedTraitRules.OrderedFixedTraits.Count,
     "Frieren's fixed traits are distinct, as Core registration requires");
+
+// The legacy prefix is compared, never written out: it must not appear in this source either.
+var saveIds = FrierenSaveIds.All;
+Check(saveIds.Count == 6 && saveIds.Distinct().Count() == 6
+        && saveIds.All(id => id.Split(FrierenLegacyIds.CurrentPrefix).Length == 2),
+    "every save-persistent Frieren ID contains the Delvers prefix exactly once");
+string LegacyPart(string oldId, string newId)
+{
+    var at = newId.IndexOf(FrierenLegacyIds.CurrentPrefix, StringComparison.Ordinal);
+    var tail = newId.Substring(at + FrierenLegacyIds.CurrentPrefix.Length);
+    return oldId.StartsWith(newId.Substring(0, at), StringComparison.Ordinal) && oldId.EndsWith(tail, StringComparison.Ordinal)
+        ? oldId.Substring(at, oldId.Length - at - tail.Length) : null;
+}
+var legacyParts = FrierenLegacyIds.SaveRenames.Select(pair => LegacyPart(pair.Key, pair.Value)).Distinct().ToArray();
+Check(FrierenLegacyIds.SaveRenames.Count == 6 && FrierenLegacyIds.SaveRenames.Values.OrderBy(id => id).SequenceEqual(saveIds.OrderBy(id => id))
+        && legacyParts.Length == 1 && !string.IsNullOrEmpty(legacyParts[0]) && legacyParts[0] != FrierenLegacyIds.CurrentPrefix,
+    "each old save ID maps to the current ID with only the prefix swapped, the same prefix for all");
+Check(!FrierenLegacyIds.SaveRenames.Keys.Any(id => id.Contains(FrierenLegacyIds.CurrentPrefix)),
+    "no old save ID already carries the Delvers prefix, so no rename chain exists");
+Check(FrierenLegacyIds.NameKey == legacyParts[0] + "_Frieren_Name",
+    "the development-era name key uses the same legacy prefix");
 
 Check(FrierenEquipmentRules.SheetEntry("ITEM_ClothArmor", "ITEM_WoodSword_1") == "ITEM_ClothArmor_1",
     "starting item uses the native sheet format with a count suffix");

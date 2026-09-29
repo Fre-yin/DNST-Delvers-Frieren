@@ -1,9 +1,4 @@
 using HarmonyLib;
-#if BEPINEX
-using global::Refactor.Addressable;
-#else
-using Il2CppRefactor.Addressable;
-#endif
 using UnityEngine;
 
 namespace FrierenPortrait;

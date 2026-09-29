@@ -1,19 +1,4 @@
 using Il2CppInterop.Runtime;
-#if BEPINEX
-using global::Refactor;
-#else
-using Il2CppRefactor;
-#endif
-#if BEPINEX
-using global::Refactor.Component;
-#else
-using Il2CppRefactor.Component;
-#endif
-#if BEPINEX
-using global::Refactor.Main;
-#else
-using Il2CppRefactor.Main;
-#endif
 using CandidateTraits = Il2CppSystem.Collections.Generic.List<string>;
 
 namespace FrierenPortrait;
