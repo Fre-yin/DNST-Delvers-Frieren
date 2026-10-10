@@ -1,0 +1,5 @@
+Updated for the Dungeon Settlers game update DS_B.0.4.29 (Steam build 25846389).
+Requires Delvers Core 0.4.1. Update Core and Frieren together.
+Fixed: Under BepInEx, Frieren 0.4.0 loaded only together with exactly Core 0.4.0 and stayed off with Core 0.4.1. Frieren now accepts Core 0.4.1 or later.
+The start message in the log now names the game version checked by the installed Core.
+Tested under BepInEx and MelonLoader on the new build, together with Extended Hotbar 1.0.2.
