@@ -1,0 +1,1 @@
+Adds Frieren as a unique recruit for Custom Expedition and the guild. Requires Delvers Core 0.4.1.
