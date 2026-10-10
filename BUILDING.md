@@ -2,10 +2,10 @@
 
 [English](BUILDING.en.md)
 
-Diese Quellfassung enthält nur Frieren, seine Adapter, Tests und vier Laufzeit-PNGs. Der Core-Code wird nicht dupliziert. Benötigt werden die öffentliche Core-0.4.0-Quelle mit API 1.4.0, PowerShell 7, ein .NET SDK mit .NET-6-Targeting-Pack sowie je eine initialisierte lokale Spielkopie für MelonLoader 0.7.3 und BepInEx 6 Unity IL2CPP x64.
+Diese Quellfassung enthält nur Frieren, seine Adapter, Tests und vier Laufzeit-PNGs. Der Core-Code wird nicht dupliziert. Benötigt werden die öffentliche Core-0.4.1-Quelle mit API 1.4.0, PowerShell 7, ein .NET SDK mit .NET-6-Targeting-Pack sowie je eine initialisierte lokale Spielkopie für MelonLoader 0.7.3 und BepInEx 6 Unity IL2CPP x64.
 
 ```powershell
-$CoreSourceDir = Read-Host 'Pfad zur Core-0.4.0-Quellfassung'
+$CoreSourceDir = Read-Host 'Pfad zur Core-0.4.1-Quellfassung'
 $MelonGameDir = Read-Host 'Pfad zur MelonLoader-Spielkopie'
 $BepInExGameDir = Read-Host 'Pfad zur BepInEx-Spielkopie'
 pwsh -File .\Build-Release.ps1 -ValidateOnly `

@@ -2,10 +2,10 @@
 
 [Deutsch](BUILDING.md)
 
-This source distribution contains only Frieren, its adapters, tests, and four runtime PNGs. Core code is not duplicated. You need the public Core 0.4.0 source with API 1.4.0, PowerShell 7, a .NET SDK with the .NET 6 targeting pack, and initialized local game copies for MelonLoader 0.7.3 and BepInEx 6 Unity IL2CPP x64.
+This source distribution contains only Frieren, its adapters, tests, and four runtime PNGs. Core code is not duplicated. You need the public Core 0.4.1 source with API 1.4.0, PowerShell 7, a .NET SDK with the .NET 6 targeting pack, and initialized local game copies for MelonLoader 0.7.3 and BepInEx 6 Unity IL2CPP x64.
 
 ```powershell
-$CoreSourceDir = Read-Host 'Path to the Core 0.4.0 source'
+$CoreSourceDir = Read-Host 'Path to the Core 0.4.1 source'
 $MelonGameDir = Read-Host 'Path to the MelonLoader game copy'
 $BepInExGameDir = Read-Host 'Path to the BepInEx game copy'
 pwsh -File .\Build-Release.ps1 -ValidateOnly `

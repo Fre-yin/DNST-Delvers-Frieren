@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.1: 10.10.2026
+
+- Angepasst an das Spielupdate DS_B.0.4.29 (Steam Version 25846389). Benötigt Delvers Core 0.4.1 mit API 1.4.0. Installiere beide zusammen.
+- Behoben: Unter BepInEx lud Frieren 0.4.0 nur zusammen mit genau Core 0.4.0. Frieren verlangt jetzt Core ab Version 0.4.1, damit spätere Core Patches ohne neues Frieren laufen. MelonLoader war nicht betroffen.
+- Die Startmeldung im Log nennt jetzt die Spielversion, die der installierte Core geprüft hat.
+- Geprüft unter MelonLoader 0.7.3 und BepInEx 6.0.0-be.788 auf DS_B.0.4.29: 47 Frieren-Prüfungen je Loader ohne Buildwarnungen. Im Spiel wurden Testspielstände mit alten Keys und fehlenden festen Traits geladen, gespeichert und erneut geladen, zusammen mit Extended Hotbar 1.0.2. Frierens Startausrüstung und der Schutz von Core vor beschädigten Spielständen wurden ebenfalls geprüft.
+
 ## 0.4.0: 29.09.2026
 
 - Frierens gespeicherte Keys tragen jetzt einheitlich das Präfix `Delvers`, zum Beispiel `AFFECTER_DelversElfArchmage`. Ältere Spielstände werden beim Laden automatisch umgestellt. Dafür meldet Frieren die Umbenennung bei Core an.
