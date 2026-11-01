@@ -208,8 +208,8 @@ internal static class BookloverReadApplyMarkPatch
     }
 }
 
-// The private Apply(RemoveCarryItemApplyData) overload is inlined into this virtual
-// dispatcher and never called natively (Cpp2IL CallerCount 0), so hook the dispatcher.
+// The private Apply(RemoveCarryItemApplyData) overload has no native caller (that it lies built
+// into this virtual dispatcher is the catalog's estimate), so hook the dispatcher.
 // Only a marked reading instance reaching it authorizes the following removal event.
 [HarmonyPatch(typeof(MainEventApplier), nameof(MainEventApplier.Apply),
     new[] { typeof(IApplyData), typeof(Il2CppSystem.Collections.Generic.List<IApplyData>) })]

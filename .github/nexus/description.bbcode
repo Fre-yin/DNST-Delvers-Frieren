@@ -1,38 +1,38 @@
-Delvers Frieren adds Frieren as a unique recruit in Dungeon Settlers. She can appear in Custom Expedition and in the guild. She has her own biography and portraits, the legendary Elven Archmage background and the Booklover trait. Her story follows her search for rare spells into the awakened dungeon core.
+Delvers Frieren adds Frieren as a unique recruit in Dungeon Settlers. She can appear in Custom Expedition and in the guild. She has her own biography and portraits, the legendary Elven Archmage background and the Booklover trait. Her story follows her search for rare spells into the awakened dungeon core. Her name appears in each game language's own script.
 
 The guild charges technique books to recruit her: one book for each started 150 gold of the usual price, with a minimum of one. Once Frieren has joined a campaign, she will not be generated again, even if she later dies. Elven Archmage lets her use fire, water and nature magic with the appropriate staffs. Booklover can also appear on characters from the game's original races. Using a technique book grants two main skill points, two secondary skill points and a temporary mood boost.
 
-This is an early release. A future goal is to add Frieren's spell Zoltraak. It is not included in the current version.
+Frieren also casts her own spell Zoltraak: from a turning magic circle she channels a beam for three seconds that strikes the first enemy in a line with 15 hits of 40% of her magic attack each, and each hit lowers physical and magic resistance for a while. Casting, the shot and the beam have their own sounds. An obstacle in the way catches the beam; destructible obstacles take the damage, including your own buildings, trees and ore.
 
 [size=4][b]Requirements[/b][/size]
 
-Version 0.4.1 requires [url=https://www.nexusmods.com/dungeonsettlers/mods/12]Delvers Core 0.4.1[/url] with API 1.4.0. Install Core first, choose the same loader for both mods and update both together. Under BepInEx, Frieren 0.4.0 only loads with exactly Core 0.4.0, so it stays off after the Core update.
+Version 0.5.0 requires [url=https://www.nexusmods.com/dungeonsettlers/mods/12]Delvers Core 0.5.0[/url] or later. Install Core first, choose the same loader for both mods and update both together. With Core 0.4.1, Frieren 0.5.0 stays off and says so in the log.
 
-You need Windows x64, Dungeon Settlers DS_B.0.4.29 with the verified signature of Steam build 25846389, and either MelonLoader 0.7.3 or BepInEx 6 for Unity IL2CPP x64. Download only the Frieren ZIP for your loader. Do not mix loaders in the same game installation.
+You need Windows x64, Dungeon Settlers DS_B.0.4.29 with the verified signature of Steam build 25846389, and BepInEx 6 for Unity IL2CPP x64 (tested with 6.0.0-be.788). Version 0.5.0 is for BepInEx only.
 
-[url=https://www.nexusmods.com/dungeonsettlers/mods/5]Extended Hotbar 1.0.2[/url] is optional. It was tested together with Core 0.4.1 and Frieren 0.4.1.
+[url=https://www.nexusmods.com/dungeonsettlers/mods/5]Extended Hotbar 1.0.2[/url] is optional. It was tested together with Core 0.5.0 and Frieren 0.5.0.
 
 [size=4][b]Installation[/b][/size]
 
 Back up your saves before installing or updating.
 
-If you used an older version containing DungeonSettlersFrierenPortrait.dll, remove that file from Mods/, UserLibs/ or BepInEx/plugins/.
+If you used an older version containing DungeonSettlersFrierenPortrait.dll, remove that file from BepInEx/plugins/, Mods/ or UserLibs/.
 
-Install Core 0.4.1, then extract the matching Frieren ZIP into the game folder. The ZIP already contains the required folders.
+Install Core 0.5.0, then extract the matching Frieren ZIP into the game folder. The ZIP already contains the required folders.
 
-With MelonLoader, the adapter belongs in Mods/, the Frieren DLL in UserLibs/ and the images in Mods/DungeonSettlersDelvers/Frieren/.
-
-With BepInEx, both DLLs belong in BepInEx/plugins/DungeonSettlersDelvers/ and the images in its Frieren/ folder.
+With BepInEx, both DLLs belong in BepInEx/plugins/DungeonSettlersDelvers/ and the images and sounds in its Frieren/ folder.
 
 [size=4][b]Updating older saves[/b][/size]
 
-Since 0.4.0, Frieren converts her older saved keys automatically. Once you save a campaign with 0.4.0 or later, Frieren 0.3.x can no longer load it completely. Keep a backup if you may want to return to an older version.
+Since 0.4.0, Frieren converts her older saved keys automatically. Once you save a campaign with 0.4.0 or later, Frieren 0.3.x can no longer load it completely.
+
+Since 0.5.0, Frieren learns Zoltraak, also in existing campaigns, and the spell is stored in the save. Such a save no longer loads cleanly with Frieren 0.4.x or without Frieren, and Core then blocks saving. Keep a backup if you may want to return to an older version.
 
 [size=4][b]Testing[/b][/size]
 
-For 0.4.1, test saves with older keys and missing fixed traits were loaded, saved and loaded again on DS_B.0.4.29 under both loaders, together with Extended Hotbar 1.0.2. Frieren's starting equipment and Core's protection against damaged saves were checked as well.
+For 0.5.0, test saves were loaded, saved and loaded again on DS_B.0.4.29 under BepInEx, together with Core's data and Extended Hotbar 1.0.2. Frieren cast Zoltraak: the beam appeared, left again after the channel and the cooldown started.
 
-Frieren passed 47 offline checks per loader without build warnings or errors. For 0.4.0, new Custom Expeditions and existing campaigns with Frieren were also loaded under both loaders. Quickload and further cases involving older saves have not yet been fully checked in game.
+Frieren passed 91 offline checks without build warnings or errors. Quickload and further cases involving older saves have not yet been fully checked in game.
 
 [size=4][b]Source and rights[/b][/size]
 

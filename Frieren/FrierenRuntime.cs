@@ -1,4 +1,3 @@
-using HarmonyLib;
 using UnityEngine;
 
 namespace FrierenPortrait;
@@ -7,6 +6,18 @@ namespace FrierenPortrait;
 // shared logging and coroutine services come from Core.
 public sealed class FrierenRuntime
 {
+    // The one Core API requirement of Frieren, checked by both loader adapters and the runtime.
+    // 1.6.0: UniquenessEnforced for test campaigns with free recruitment.
+    // 1.8.0: DelversSummons for Zoltraak's own and allied summons; 1.5 to 1.8 are not
+    // released yet, so DelversSummons counts to 1.8.0. A Core without it does not load Frieren.
+    public const string RequiredCoreApi = "1.8.0";
+
+    // Measuring Zoltraak (Modding Toolkit -Only zoltraak), like Core's
+    // SetApocalypseForTest: the share of magic attack per hit in percent, only in a Core test
+    // campaign and only for that campaign. Returns the share now in effect there; outside a test
+    // campaign nothing changes and the release value comes back. BCL types only, so tools can
+    // call it through reflection.
+    public static float SetZoltraakHitPercentForTest(float percent) => Zoltraak.SetHitPercentForTest(percent);
     internal static FrierenRuntime Instance { get; private set; }
     internal readonly PortraitAssets Assets = new();
     internal UnitProfileTableData Profile;
@@ -17,6 +28,11 @@ public sealed class FrierenRuntime
     private TraitSheet registeredTraitSheet;
     private AffecterSheet registeredAffecterSheet;
     private bool busy, failed, enabled;
+    // Registration errors are caught in Fail(); the self-test reads this flag.
+    internal bool Failed => failed;
+    private const int RegistrationCheckInterval = 120;
+    private int updatesUntilRegistrationCheck;
+    internal int UpdatesUntilRegistrationCheck => updatesUntilRegistrationCheck;
     private IDisposable coreIntegration;
     private IDisposable loadIntegration;
     private IDisposable uniqueCandidateRegistration;
@@ -26,8 +42,8 @@ public sealed class FrierenRuntime
     public void Initialize(HarmonyLib.Harmony harmony)
     {
         if (!DelversCoreRuntime.IsReady
-            || !DelversCoreRuntime.SupportsApi(DelversCoreRuntime.MinimumApiVersionForNativeValueLists))
-            throw new InvalidOperationException("Frieren requires Dungeon Settlers Delvers Core API 1.4.0 or later in API 1.x.");
+            || !DelversCoreRuntime.SupportsApi(RequiredCoreApi))
+            throw new InvalidOperationException($"Frieren requires Dungeon Settlers Delvers Core API {RequiredCoreApi} or later in API 1.x.");
         if (Instance != null)
             throw new InvalidOperationException("A Frieren runtime instance is already active; the second loader entry was rejected before registration.");
         LegacyFrierenConflict.ThrowIfPresent();
@@ -245,12 +261,16 @@ public sealed class FrierenRuntime
 
     public void Update()
     {
-        if (enabled && !failed)
+        // Fallback only: the sheet Parse hooks and scene changes register Frieren right away.
+        // The full check reads several tables and creates IL2CPP strings, so it runs only on
+        // every 120th update. A managed counter, because every interop call allocates.
+        if (enabled && !failed && --updatesUntilRegistrationCheck <= 0)
         {
+            updatesUntilRegistrationCheck = RegistrationCheckInterval;
             EnsureGameplay();
+            if (!failed && registeredSheet == null)
+                Ensure(DataSheetManager.Instance?._unitProfile);
         }
-        if (enabled && !failed && registeredSheet == null)
-            Ensure(DataSheetManager.Instance?._unitProfile);
     }
 
     public void Shutdown()
@@ -275,66 +295,4 @@ public sealed class FrierenRuntime
     private static bool IsUniqueCandidate(RecruitCandidateData candidate)
         => candidate != null && FrierenUniqueCandidateRules.IsUniqueCandidate(
             candidate.UnitProfileKey, candidate.BackgroundTrait);
-}
-
-internal static class LegacyFrierenConflict
-{
-    private const string LegacyAssemblyName = "DungeonSettlersFrierenPortrait";
-    private const string LegacyFileName = LegacyAssemblyName + ".dll";
-
-    internal static void ThrowIfPresent()
-    {
-        var loaded = AppDomain.CurrentDomain.GetAssemblies()
-            .FirstOrDefault(assembly => string.Equals(assembly.GetName().Name,
-                LegacyAssemblyName, StringComparison.OrdinalIgnoreCase));
-        if (loaded != null)
-            throw new InvalidOperationException("The legacy Frieren DLL is already loaded. Remove "
-                + LegacyFileName + " from Mods or BepInEx/plugins and restart the game.");
-
-        var gameRoot = Path.GetDirectoryName(UnityEngine.Application.dataPath);
-        var pluginRoots = new[]
-        {
-            Path.Combine(gameRoot, "Mods"),
-            Path.Combine(gameRoot, "BepInEx", "plugins")
-        };
-        string file = null;
-        foreach (var root in pluginRoots)
-        {
-            if (!Directory.Exists(root)) continue;
-            try { file = Directory.EnumerateFiles(root, LegacyFileName, SearchOption.AllDirectories).FirstOrDefault(); }
-            catch (UnauthorizedAccessException) { }
-            catch (IOException) { }
-            if (file != null) break;
-        }
-        if (file != null)
-            throw new InvalidOperationException("Remove the legacy Frieren DLL at " + file
-                + " and restart the game before loading Dungeon Settlers Delvers: Frieren.");
-    }
-}
-
-[HarmonyPatch(typeof(UnitProfileSheet), nameof(UnitProfileSheet.Parse))]
-internal static class ParsedProfilesPatch
-{
-    private static void Postfix(UnitProfileSheet __instance) => FrierenRuntime.Instance?.Ensure(__instance, true);
-}
-
-[HarmonyPatch(typeof(UnitProfileSheet), nameof(UnitProfileSheet.GetProfile))]
-internal static class ProfilePoolPatch
-{
-    private static void Prefix(UnitProfileSheet __instance) => FrierenRuntime.Instance?.Ensure(__instance);
-}
-
-[HarmonyPatch(typeof(UnitProfileSheet), nameof(UnitProfileSheet.GetData))]
-internal static class ProfileLookupPatch
-{
-    private static void Prefix(UnitProfileSheet __instance) => FrierenRuntime.Instance?.Ensure(__instance);
-}
-
-[HarmonyPatch(typeof(UnitVisualDatabase), nameof(UnitVisualDatabase.GetPortraitSprite))]
-internal static class PortraitLookupPatch
-{
-    private static void Prefix(UnitVisualDatabase __instance, string key)
-    {
-        if (key == FrierenIds.PortraitKey) FrierenRuntime.Instance?.EnsureVisuals(__instance);
-    }
 }

@@ -6,8 +6,18 @@ namespace FrierenPortrait;
 
 // The native candidate generator excludes profiles only while a matching unit
 // still exists. A campaign marker also remembers Frieren after her death.
+// Core decides whether uniqueness applies: only a test campaign with free
+// recruitment relaxes it (API 1.6.0).
 internal static class FrierenCampaignHistory
 {
+    // The one rule for keeping Frieren out of a candidate pool: she was already
+    // recruited in this campaign and Core enforces uniqueness here.
+    internal static bool Excluded(Il2CppSystem.Guid guid)
+    {
+        var relaxed = !DelversCoreRuntime.UniquenessEnforced(guid.ToString());
+        return !relaxed && Seen(guid);
+    }
+
     internal static bool Seen(Il2CppSystem.Guid guid)
         => CampaignPresence.Seen(guid.ToString(), "frieren",
             CampaignPresence.LegacyMarkerName(guid.ToString()));
@@ -20,20 +30,22 @@ internal static class FrierenCampaignHistory
 
     internal static void ObservePlayerUnits(RecruitHelper helper)
     {
+        // The first refresh of a session also notes which other mods patch the recruitment's methods.
+        try { FrierenRecruitPatchAudit.RunOnce(); }
+        catch (Exception ex) { DelversHost.Warning("FRIEREN_RECRUIT_PATCH_AUDIT_FAILED: " + ex.Message); }
         var entities = helper?._entityContainer?.GetAllEntitiesOnCampaign();
         var clan = helper?._clanDataContainer;
         if (entities == null || clan == null) return;
         foreach (var key in entities.Keys)
         {
             var unit = entities[key]?.TryCast<UnitEntity>();
-            if (unit != null && unit.Faction == FactionType.Player && unit.ProfileKey == FrierenIds.ProfileKey)
+            if (unit != null && unit.Faction == FactionType.Player && ProfileKeyOf(unit) == FrierenIds.ProfileKey)
             {
                 Mark(clan.CampaignGuid);
                 break;
             }
         }
-        if (Seen(clan.CampaignGuid))
-            helper._existProfiles?.Add(FrierenIds.ProfileKey);
+        if (Excluded(clan.CampaignGuid)) helper._existProfiles?.Add(FrierenIds.ProfileKey);
     }
 
     internal static void ObservePlayerUnits(EntityEventHandler handler)
@@ -50,6 +62,15 @@ internal static class FrierenCampaignHistory
         if (clan != null) ObservePlayerUnits(entities, clan.CampaignGuid);
     }
 
+    // A player unit without a profile (Toolkit's dummy from SpawnUnitRequested, sammelblock 185848) throws a
+    // NullReferenceException inside the game's UnitEntity.ProfileKey (UnitProfileReader.GetProfileKey). It reaches managed code
+    // as an Il2CppException (catching NullReferenceException alone missed it); such a unit is no Frieren.
+    private static string ProfileKeyOf(UnitEntity unit)
+    {
+        try { return unit.ProfileKey; }
+        catch (Exception ex) when (ex is Il2CppInterop.Runtime.Il2CppException || ex is NullReferenceException) { return null; }
+    }
+
     private static void ObservePlayerUnits(
         Il2CppSystem.Collections.Generic.Dictionary<Il2CppSystem.Guid, IEntity> entities,
         Il2CppSystem.Guid campaignGuid)
@@ -58,7 +79,7 @@ internal static class FrierenCampaignHistory
         foreach (var key in entities.Keys)
         {
             var unit = entities[key]?.TryCast<UnitEntity>();
-            if (unit != null && unit.Faction == FactionType.Player && unit.ProfileKey == FrierenIds.ProfileKey)
+            if (unit != null && unit.Faction == FactionType.Player && ProfileKeyOf(unit) == FrierenIds.ProfileKey)
             {
                 Mark(campaignGuid);
                 break;
@@ -73,11 +94,11 @@ internal static class FrierenCampaignHistory
 internal static class FrierenHistoryCandidatePatch
 {
     private static void Prefix(RecruitHelper __instance,
-        Il2CppSystem.Collections.Generic.HashSet<string> __1)
+        Il2CppSystem.Collections.Generic.HashSet<string> alreadyExistProfiles)
     {
-        if (__1 != null && __instance?._clanDataContainer != null
-            && FrierenCampaignHistory.Seen(__instance._clanDataContainer.CampaignGuid))
-            __1.Add(FrierenIds.ProfileKey);
+        if (alreadyExistProfiles != null && __instance?._clanDataContainer != null
+            && FrierenCampaignHistory.Excluded(__instance._clanDataContainer.CampaignGuid))
+            alreadyExistProfiles.Add(FrierenIds.ProfileKey);
     }
 }
 
@@ -85,8 +106,8 @@ internal static class FrierenHistoryCandidatePatch
     new[] { typeof(SpawnUnitRequested) })]
 internal static class FrierenHistorySpawnPatch
 {
-    private static void Postfix(EntityEventHandler __instance, SpawnUnitRequested __0)
+    private static void Postfix(EntityEventHandler __instance, SpawnUnitRequested msg)
     {
-        if (__0?.Faction == FactionType.Player) FrierenCampaignHistory.ObservePlayerUnits(__instance);
+        if (msg?.Faction == FactionType.Player) FrierenCampaignHistory.ObservePlayerUnits(__instance);
     }
 }

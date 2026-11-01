@@ -53,7 +53,7 @@ internal static class FrierenSaveMigrations
     {
         try
         {
-            if (!FrierenNameMigration.Normalize(profile, out _)) return;
+            if (!FrierenNameMigration.Normalize(profile)) return;
             // The old key is never logged: players share logs, and it carries a personal name.
             DelversHost.Info(
                 $"FRIEREN_NAME_MIGRATED profile={FrierenIds.ProfileKey} from=legacy-name-key to={FrierenGameplay.NameKey}");
@@ -118,10 +118,18 @@ internal static class FrierenSaveMigrations
         try { AfterClanDeserialize(campaign.ClanDataContainer); }
         catch (Exception ex) { migrationFailure = ex; }
 
-        FrierenMagicSkills.ReconcileLoadedCampaign(campaign);
+        // Runtime fix-up only: its failure must not reach Core, which would block saving until
+        // the game restarts. The next spawn, equipment or reset hook reconciles again.
+        try { FrierenMagicSkills.ReconcileLoadedCampaign(campaign); }
+        catch (Exception ex) { DelversHost.Error("FRIEREN_MAGIC_SKILLS_CAMPAIGN_RECONCILE_FAILED: " + ex); }
 
         try { FrierenCampaignHistory.ObservePlayerUnits(campaign); }
         catch (Exception ex) { DelversHost.Warning("FRIEREN_CAMPAIGN_HISTORY_FAILED: " + ex.Message); }
+
+        // Zoltraak's speed cache after every load, its own step (not behind the magic skills'
+        // early return). ZoltraakGameSpeedPatch.SyncAfterLoad.
+        try { DelversHost.Info("FRIEREN_ZOLTRAAK_SPEED " + ZoltraakGameSpeedPatch.SyncAfterLoad()); }
+        catch (Exception ex) { DelversHost.Warning("FRIEREN_ZOLTRAAK_SPEED_FAILED: " + ex.Message); }
 
         if (migrationFailure != null)
             System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(migrationFailure).Throw();

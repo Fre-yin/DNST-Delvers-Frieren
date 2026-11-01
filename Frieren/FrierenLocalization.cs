@@ -20,6 +20,7 @@ internal static class FrierenLocalization
     internal const string BookloverMoodDescKey = "TEXTKEY_AFFECTER_DelversBookloverMood_DESC";
     internal const string BookloverMoodFlavorKey = "TEXTKEY_AFFECTER_DelversBookloverMood_FLAVOR";
 
+
     private static readonly TextKeyTableData[] Rows =
     {
         Row(TraitNameKey,
@@ -115,15 +116,55 @@ internal static class FrierenLocalization
             "Хорошая книга делает всё светлее.", "好书让一切都更加明亮。", "好書讓一切都更加明亮。",
             "いい本は、すべてを明るくしてくれる。", "Un buen libro lo ilumina todo.",
             "Um bom livro deixa tudo mais alegre."),
+        // Her name in each language's own script. The key stays "Frieren", the
+        // NameTextKey saved with her, so the game's text table resolves it natively.
+        Row(FrierenGameplay.NameKey,
+            FrierenNameTexts.ByLanguage[0], FrierenNameTexts.ByLanguage[1], FrierenNameTexts.ByLanguage[2],
+            FrierenNameTexts.ByLanguage[3], FrierenNameTexts.ByLanguage[4], FrierenNameTexts.ByLanguage[5],
+            FrierenNameTexts.ByLanguage[6], FrierenNameTexts.ByLanguage[7], FrierenNameTexts.ByLanguage[8],
+            FrierenNameTexts.ByLanguage[9]),
+        // Zoltraak and its break. The spell's name is written in each language's own script,
+        // like Frieren's name.
+        Row(Zoltraak.NameTextKey, "Zoltraak", "졸트라크", "Zoltraak", "Zoltraak", "Зольтраак", "佐尔特拉克", "佐爾特拉克", "ゾルトラーク",
+            "Zoltraak", "Zoltraak"),
+        // Short, numbers only where they decide something. The beam ends at the first enemy; an obstacle in front still
+        // catches it. Tooltip step 1:
+        // every language names the numbers as {n} from the skill row and the stats and the break as tags, filled and
+        // coloured by the game's tooltip (ZoltraakTextRules.Descriptions).
+        Row(Zoltraak.DescriptionTextKey,
+            ZoltraakTextRules.Descriptions[0], ZoltraakTextRules.Descriptions[1], ZoltraakTextRules.Descriptions[2], ZoltraakTextRules.Descriptions[3],
+            ZoltraakTextRules.Descriptions[4], ZoltraakTextRules.Descriptions[5], ZoltraakTextRules.Descriptions[6], ZoltraakTextRules.Descriptions[7],
+            ZoltraakTextRules.Descriptions[8], ZoltraakTextRules.Descriptions[9]),
+        Row(Zoltraak.BreakNameTextKey, "Zoltraak Break", "졸트라크 균열", "Brèche de Zoltraak", "Zoltraakbruch", "Пролом Зольтраака",
+            "佐尔特拉克破防", "佐爾特拉克破防", "ゾルトラーク崩し", "Ruptura de Zoltraak", "Ruptura de Zoltraak"),
+        // Concise text approved (ZOLTRAAK-UMSETZUNG.md, Abschnitt 10). The game keeps
+        // resistance in points, not percent (self-test, Lauf 13: "Stapel * -1.0" without %).
+        Row(Zoltraak.BreakDescriptionTextKey,
+            "1 point less physical and magic resistance per stack, up to 30.",
+            "중첩당 물리 및 마법 저항 1 감소, 최대 30중첩.",
+            "1 point de résistance physique et magique en moins par charge, 30 au maximum.",
+            "Je Stapel 1 Punkt weniger physische und magische Resistenz, höchstens 30.",
+            "На 1 единицу меньше физического и магического сопротивления за заряд, не более 30.",
+            "每层物理和魔法抗性降低1点，最多30层。",
+            "每層物理和魔法抗性降低1點，最多30層。",
+            "スタックごとに物理耐性と魔法耐性が1ポイント低下、最大30スタック。",
+            "1 punto menos de resistencia física y mágica por acumulación, hasta 30.",
+            "1 ponto a menos de resistência física e mágica por acúmulo, até 30."),
     };
 
     private static IntPtr registeredSheet;
     private static LanguageType registeredLanguage;
+    private static string registeredName;
+
+    // The name prefixes run for every name lookup, so they read this cached text
+    // instead of the text table. Register() refreshes it on each language change.
+    internal static string Name => registeredName ?? FrierenNameTexts.English;
 
     internal static void ResetLifecycle()
     {
         registeredSheet = IntPtr.Zero;
         registeredLanguage = default;
+        registeredName = null;
     }
 
     internal static string TraitName => Get(TraitNameKey, "Elfische Erzmagierin");
@@ -162,11 +203,12 @@ internal static class FrierenLocalization
             }
             else sheet._tableData.Add(row.Key, row);
 
-            var localized = TextKeyLanguageTool.GetTextByLanguage(activeRow, language);
-            sheet._textTable[row.Key] = TextKeyLanguageTool.GetPreferredText(localized, activeRow.English);
+            sheet._textTable[row.Key] = Resolve(activeRow, language);
         }
         registeredSheet = sheet.Pointer;
         registeredLanguage = language;
+        registeredName = sheet._textTable.TryGetValue(FrierenGameplay.NameKey, out var name)
+            && !string.IsNullOrWhiteSpace(name) ? name : FrierenNameTexts.English;
     }
 
     internal static string Get(string key, string fallback)
@@ -196,6 +238,9 @@ internal static class FrierenLocalization
                     throw new InvalidOperationException($"Frieren-Platzhalter ungültig: {row.Key}/{language}");
                 if (row.Key == BiographyKey && CountOccurrences(text, BiographyNameFormat) != 1)
                     throw new InvalidOperationException($"Frieren-Biografiename ist nicht hervorgehoben: {language}");
+                if (row.Key == Zoltraak.DescriptionTextKey && (CountOccurrences(text, "[STATUS_MagicAttackPower]") != 1
+                        || ZoltraakTextRules.HighestPlaceholder(text) >= Zoltraak.TooltipValues.Length))
+                    throw new InvalidOperationException($"Zoltraak-Beschreibung ohne Magieangriff oder mit Platzhalter ohne Wert: {language}");
             }
         }
     }
@@ -213,8 +258,7 @@ internal static class FrierenLocalization
                 sheet.ParseMatchingLanguage(language);
                 foreach (var row in Rows)
                 {
-                    var expected = TextKeyLanguageTool.GetPreferredText(
-                        TextKeyLanguageTool.GetTextByLanguage(row, language), row.English);
+                    var expected = Resolve(row, language);
                     if (!sheet._textTable.TryGetValue(row.Key, out var actual) || actual != expected)
                         throw new InvalidOperationException($"Frieren-Sprachwechsel fehlgeschlagen: {row.Key}/{language}");
                 }
@@ -222,6 +266,10 @@ internal static class FrierenLocalization
         }
         finally { sheet.ParseMatchingLanguage(original); }
     }
+
+    // The active text of a row (English when a language has none). Zoltraak's stat is a tag the game's tooltip names itself.
+    private static string Resolve(TextKeyTableData row, LanguageType language)
+        => TextKeyLanguageTool.GetPreferredText(TextKeyLanguageTool.GetTextByLanguage(row, language), row.English);
 
     private static bool SameTranslations(TextKeyTableData left, TextKeyTableData right)
     {
@@ -257,6 +305,6 @@ internal static class FrierenLocalization
 [HarmonyPatch(typeof(TextSheet), nameof(TextSheet.ParseMatchingLanguage))]
 internal static class FrierenLanguageRegistrationPatch
 {
-    private static void Postfix(TextSheet __instance, LanguageType __0)
-        => FrierenLocalization.Register(__instance, __0);
+    private static void Postfix(TextSheet __instance, LanguageType type)
+        => FrierenLocalization.Register(__instance, type);
 }

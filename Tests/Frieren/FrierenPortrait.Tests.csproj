@@ -9,8 +9,10 @@
     <AssemblyName>FrierenPortrait.Tests</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../Shared/SourceRules.cs" Link="SourceRules.cs" />
     <Compile Include="../../ProjectRules.cs" Link="ProjectRules.cs" />
     <Compile Include="$(DelversCoreRoot)/Core/UniqueCandidateRules.cs" Link="UniqueCandidateRules.cs" />
     <Compile Include="$(DelversCoreRoot)/Core/UniqueCandidatePredicateRegistry.cs" Link="UniqueCandidatePredicateRegistry.cs" />
+    <Compile Include="$(DelversCoreRoot)/Core/PackRegistry.cs" Link="PackRegistry.cs" />
   </ItemGroup>
 </Project>

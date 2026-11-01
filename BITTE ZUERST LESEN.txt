@@ -1,14 +1,10 @@
-DUNGEON SETTLERS DELVERS: FRIEREN 0.4.1
+DUNGEON SETTLERS DELVERS: FRIEREN 0.5.0
 
-Installiere zuerst Delvers Core 0.4.1 mit Core API 1.4.0. Frieren benötigt denselben Loader wie Core. Sichere deine Spielstände vor dem Update und entferne die alte DungeonSettlersFrierenPortrait.dll aus Mods, UserLibs oder BepInEx/plugins. Ältere Spielstände werden beim Laden umgestellt und lassen sich nach dem Speichern nicht mehr mit Frieren 0.3.x laden.
-
-MelonLoader 0.7.3:
-- Mods/DungeonSettlersDelvers.Frieren.MelonLoader.dll
-- UserLibs/DungeonSettlersDelvers.Frieren.dll
-- Vier PNGs nach Mods/DungeonSettlersDelvers/Frieren/
+Installiere zuerst Delvers Core 0.5.0. Version 0.5.0 gibt es nur für BepInEx. Sichere deine Spielstände vor dem Update und entferne die alte DungeonSettlersFrierenPortrait.dll aus BepInEx/plugins, Mods oder UserLibs. Ab 0.5.0 lernt Frieren ihren Zauber Zoltraak, auch in bestehenden Kampagnen. Ein damit gespeicherter Spielstand lässt sich mit Frieren 0.4.x oder ohne Frieren nicht mehr sauber laden. Ältere Spielstände werden beim Laden umgestellt und lassen sich nach dem Speichern nicht mehr mit Frieren 0.3.x laden.
 
 BepInEx 6 Unity IL2CPP x64:
 - Beide Frieren-DLLs nach BepInEx/plugins/DungeonSettlersDelvers/
-- Vier PNGs nach BepInEx/plugins/DungeonSettlersDelvers/Frieren/
+- Zwölf PNGs nach BepInEx/plugins/DungeonSettlersDelvers/Frieren/
+- Drei Töne nach BepInEx/plugins/DungeonSettlersDelvers/Frieren/Sounds/
 
 Dieses Paket enthält keine Core-DLL und keine Spiel- oder Loader-Dateien. Es ist für Dungeon Settlers DS_B.0.4.29 mit geprüfter Signatur vorgesehen.

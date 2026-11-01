@@ -114,6 +114,23 @@ internal static class FrierenGameplay
         ConfigureRecruitPrice(helper, candidate, guild, level);
     }
 
+    // Start group with player locks: exclude Frieren's portrait from the profile pick
+    // (see FrierenEstablishRules). A copy leaves the game's own set unchanged.
+    internal static Il2CppSystem.Collections.Generic.HashSet<string> ExcludeWhenLocked(
+        Il2CppSystem.Collections.Generic.HashSet<string> portraits, EstablishUnitRestriction restriction)
+    {
+        var locks = restriction?.Locks;
+        if (locks == null || portraits?.Contains(FrierenIds.PortraitKey) == true
+            || !FrierenEstablishRules.ExcludeFrieren(locks.MajorStatsLocked, locks.MainTraitsLocked,
+                locks.SubTraitsLocked, restriction.UseProfileRestriction, restriction.UnitProfileKey))
+            return portraits;
+        var excluded = new Il2CppSystem.Collections.Generic.HashSet<string>();
+        if (portraits != null)
+            foreach (var portrait in portraits) excluded.Add(portrait);
+        excluded.Add(FrierenIds.PortraitKey);
+        return excluded;
+    }
+
     private static bool ConfigureIdentityAndTraits(RecruitCandidateData candidate, out int level)
     {
         level = 1;
@@ -190,7 +207,8 @@ internal static class FrierenGameplay
     // (see FrierenEquipmentRules). A ValueTuple<string, int> created in managed
     // code and added to the native list crashed BepInEx 6 be.788 (Il2CppInterop
     // 1.5.3) with an access violation in UnitSpawner.SpawnPlayableUnit when
-    // Frieren spawned as a new unit; MelonLoader was unaffected.
+    // Frieren spawned as a new unit; MelonLoader was unaffected. Core's DelversNativeList.AddValue
+    // is the existing remedy for filling a native list with such a struct.
     private static bool equipmentFormatLogged;
     private static string nativeItemSample;
 
@@ -226,7 +244,7 @@ internal static class FrierenGameplay
             candidate.InitialEquipments ??= new ItemList();
             candidate.InitialEquipments.Clear();
             foreach (var key in keys)
-                candidate.InitialEquipments.Add(new Il2CppSystem.ValueTuple<string, int>(key, 1));
+                candidate.InitialEquipments.Add(new Il2CppSystem.ValueTuple<string, int>(key, 1)); // trap-ok: native list: only the Melon fallback path, it goes away with the Melon phase-out
         }
         else if (!equipmentFormatLogged)
         {

@@ -18,6 +18,12 @@ internal static class FrierenIconRegistry
             icon = assets?.BookloverIcon;
             return icon;
         }
+        // Own drawing (no game pixels); without the file the game draws the break as it would.
+        if (key == Zoltraak.BreakKey)
+        {
+            icon = Zoltraak.BreakIcon();
+            return icon;
+        }
         icon = null;
         return false;
     }
@@ -33,13 +39,13 @@ internal static class FrierenIconRegistry
 [HarmonyPatch(typeof(GameResourceLoader), nameof(GameResourceLoader.LoadAffecterIcon))]
 internal static class FrierenAffecterIconPatch
 {
-    private static bool Prefix(string __0, ref Sprite __result)
-        => FrierenIconRegistry.Prefix(__0, ref __result);
+    private static bool Prefix(string key, ref Sprite __result)
+        => FrierenIconRegistry.Prefix(key, ref __result);
 }
 
 [HarmonyPatch(typeof(GameResourceLoader), nameof(GameResourceLoader.LoadAffecterIconWithSkill))]
 internal static class FrierenAffecterIconWithSkillPatch
 {
-    private static bool Prefix(string __0, ref Sprite __result)
-        => FrierenIconRegistry.Prefix(__0, ref __result);
+    private static bool Prefix(string key, ref Sprite __result)
+        => FrierenIconRegistry.Prefix(key, ref __result);
 }

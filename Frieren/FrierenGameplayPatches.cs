@@ -1,9 +1,4 @@
 using HarmonyLib;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using UnityEngine;
-using Il2CppList = Il2CppSystem.Collections.Generic.List<string>;
-using ItemList = Il2CppSystem.Collections.Generic.List<Il2CppSystem.ValueTuple<string, int>>;
 
 namespace FrierenPortrait;
 
@@ -42,6 +37,15 @@ internal static class FrierenRecruitCandidatePatch
         typeof(Il2CppSystem.Collections.Generic.HashSet<string>), typeof(bool), typeof(EstablishUnitRestriction) })]
 internal static class FrierenEstablishCandidatePatch
 {
+    // The game applies the player's locks inside this method, so Frieren must be
+    // kept out before the profile pick instead of overwriting the locks afterwards.
+    private static void Prefix(ref Il2CppSystem.Collections.Generic.HashSet<string> alreadyExistPortraits,
+        EstablishUnitRestriction restriction)
+    {
+        try { alreadyExistPortraits = FrierenGameplay.ExcludeWhenLocked(alreadyExistPortraits, restriction); }
+        catch (Exception ex) { DelversHost.Error("FRIEREN_ESTABLISH_LOCK_EXCLUSION_FAILED: " + ex); }
+    }
+
     private static void Postfix(RecruitHelper __instance, RecruitCandidateData __result)
         => FrierenGameplay.ConfigureCandidate(__instance, __result, false);
 }
@@ -49,11 +53,11 @@ internal static class FrierenEstablishCandidatePatch
 [HarmonyPatch(typeof(SkillComponent), nameof(SkillComponent.HasEquipBypass))]
 internal static class FrierenMagicBypassPatch
 {
-    private static void Postfix(SkillComponent __instance, string __0, ref bool __result)
+    private static void Postfix(SkillComponent __instance, string key, ref bool __result)
     {
         // Preserve the complete native path (including Fire Battle Mage) and
         // only widen a failed equipment check for Frieren's background trait.
-        if (!__result && FrierenGameplay.IsMagicEquipment(__0)
+        if (!__result && FrierenGameplay.IsMagicEquipment(key)
             && FrierenGameplay.HasArchmageTrait(__instance._owner)) __result = true;
     }
 }

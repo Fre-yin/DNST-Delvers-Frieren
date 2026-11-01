@@ -6,11 +6,10 @@ namespace FrierenPortrait;
 // created by development builds that persisted the old technical name key.
 internal static class FrierenNameMigration
 {
-    internal static bool Normalize(UnitProfileComponent profile, out string previousName)
+    internal static bool Normalize(UnitProfileComponent profile)
     {
-        previousName = null;
         if (profile == null || profile.GetProfileKey() != FrierenIds.ProfileKey) return false;
-        previousName = profile.GetNameTextKey();
+        var previousName = profile.GetNameTextKey();
         if (!FrierenNameMigrationRules.ShouldMigrate(profile.GetProfileKey(), previousName,
             FrierenIds.ProfileKey, FrierenGameplay.LegacyNameKey, FrierenGameplay.NameKey)) return false;
         profile.SetNameTextKey(FrierenGameplay.NameKey);

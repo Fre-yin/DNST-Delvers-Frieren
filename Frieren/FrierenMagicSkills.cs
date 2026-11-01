@@ -9,6 +9,15 @@ internal static class FrierenMagicSkills
     internal static readonly string[] Granted =
         { "SKILL_FireMissile", "SKILL_SummonBubbling", "SKILL_StrangeSeed" };
 
+    // Saved as extra skills: the archmage magic, then Zoltraak, her own spell. Zoltraak is not
+    // part of the archmage trait (its tooltip lists Granted only) and is only saved while the
+    // game knows the skill, so a failed registration can never block saving.
+    private static IEnumerable<string> SavedSkills()
+    {
+        foreach (var key in Granted) yield return key;
+        if (Zoltraak.Available) yield return Zoltraak.SkillKey;
+    }
+
     private sealed class PendingRetry
     {
         internal IEntity Entity;
@@ -62,6 +71,9 @@ internal static class FrierenMagicSkills
         if (reconciled > 0 || incomplete > 0)
             DelversHost.Info("FRIEREN_MAGIC_SKILLS_CAMPAIGN_RECONCILED count=" + reconciled
                 + " incomplete=" + incomplete);
+        // Every campaign load, also after a trip through the title: what Zoltraak's caches still hold (ZoltraakBeam.CheckAfterLoad).
+        try { DelversHost.Info("FRIEREN_ZOLTRAAK_STATE " + ZoltraakBeam.CheckAfterLoad()); }
+        catch (Exception ex) { DelversHost.Warning("FRIEREN_ZOLTRAAK_STATE_FAILED: " + ex.Message); }
     }
 
     internal static void TryReconcile(IEntity entity, PlayerUnitDataContainer container = null,
@@ -89,7 +101,7 @@ internal static class FrierenMagicSkills
         var tree = container?.SkillViewer?.GetData(entity.Guid);
         var fullyRestored = skills != null && tree != null;
 
-        foreach (var key in Granted)
+        foreach (var key in SavedSkills())
         {
             if (tree != null)
             {
@@ -233,7 +245,7 @@ internal static class FrierenMagicSkills
         }
     }
 
-    private static bool TryContains(Il2CppSystem.Collections.Generic.IReadOnlyList<string> values,
+    internal static bool TryContains(Il2CppSystem.Collections.Generic.IReadOnlyList<string> values,
         string key, out bool contains)
     {
         contains = false;
@@ -270,10 +282,10 @@ internal static class FrierenRememberSpawnedPlayerDataPatch
     new[] { typeof(MapType), typeof(RecruitCandidateData), typeof(Vector2Int), typeof(FactionType) })]
 internal static class FrierenSpawnMagicSkillsPatch
 {
-    private static void Postfix(UnitSpawner __instance, RecruitCandidateData __1, UnitEntity __result)
+    private static void Postfix(UnitSpawner __instance, RecruitCandidateData candidateData, UnitEntity __result)
     {
-        var isFrieren = __1?.UnitProfileKey == FrierenIds.ProfileKey
-            && __1.BackgroundTrait == FrierenGameplay.TraitKey;
+        var isFrieren = candidateData?.UnitProfileKey == FrierenIds.ProfileKey
+            && candidateData.BackgroundTrait == FrierenGameplay.TraitKey;
         if (isFrieren && __result != null)
             FrierenMagicSkills.TryReconcile(__result.Cast<IEntity>(), __instance._playerUnitDataContainer,
                 true, "spawn");
@@ -289,10 +301,10 @@ internal static class FrierenSpawnMagicSkillsPatch
         typeof(Il2CppSystem.Collections.Generic.Dictionary<StatType, float>) })]
 internal static class FrierenUnequipMagicSkillsPatch
 {
-    private static void Postfix(ItemControlProcessor __instance, UnitEntity __1)
+    private static void Postfix(ItemControlProcessor __instance, UnitEntity entity)
     {
-        if (__1 != null)
-            FrierenMagicSkills.TryReconcile(__1.Cast<IEntity>(), __instance.playerUnitDataContainer,
+        if (entity != null)
+            FrierenMagicSkills.TryReconcile(entity.Cast<IEntity>(), __instance.playerUnitDataContainer,
                 context: "unequip");
     }
 }
@@ -301,14 +313,14 @@ internal static class FrierenUnequipMagicSkillsPatch
     new[] { typeof(SkillResetRequested) })]
 internal static class FrierenResetMagicSkillsPatch
 {
-    private static void Postfix(EntityEventHandler __instance, SkillResetRequested __0)
+    private static void Postfix(EntityEventHandler __instance, SkillResetRequested msg)
     {
         // This is the end of the native reset transaction: learned/runtime
         // skills were reset and equipped defaults were restored. Extra-skill
         // registrations survive, so restoring here makes their active skills
         // available again without duplicating the saved entries.
-        if (__0?.Unit != null)
-            FrierenMagicSkills.TryReconcile(__0.Unit, __instance.playerUnitDataContainer,
+        if (msg?.Unit != null)
+            FrierenMagicSkills.TryReconcile(msg.Unit, __instance.playerUnitDataContainer,
                 context: "skill-reset");
     }
 }

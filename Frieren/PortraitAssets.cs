@@ -30,6 +30,11 @@ internal sealed class PortraitAssets : IDisposable
         var booklover = Read(Path.Combine(folder, RuntimeFiles[3]), 24);
         if (normal.Length == 0 || stress.Length == 0 || trait.Length == 0 || booklover.Length == 0)
             throw new InvalidDataException("Die vier Frieren-Laufzeitgrafiken müssen gemeinsam verfügbar sein: " + folder);
+        // Zoltraak still works without its images (no beam, the game's fallback icon), so a gap
+        // is only reported.
+        var missing = Zoltraak.AssetFiles.Where(file => !File.Exists(Path.Combine(folder, file))).ToArray();
+        if (missing.Length > 0)
+            DelversHost.Warning("FRIEREN_ZOLTRAAK_ASSETS_MISSING folder=" + folder + " files=" + string.Join(",", missing));
     }
 
     private static bool HasRuntimeFiles(string folder)

@@ -4,7 +4,7 @@
 
 ### Geltungsbereich
 
-Diese Richtlinie gilt für Dungeon Settlers Delvers: Frieren und seine Pakete für MelonLoader und BepInEx. Frieren benötigt Delvers Core. Betrifft eine Meldung ausschließlich Core, nutze bitte die [Sicherheitsrichtlinie von Core](https://github.com/Fre-yin/DNST-Delvers-Core/security/policy).
+Diese Richtlinie gilt für Dungeon Settlers Delvers: Frieren und sein BepInEx-Paket. Frieren benötigt Delvers Core. Betrifft eine Meldung ausschließlich Core, nutze bitte die [Sicherheitsrichtlinie von Core](https://github.com/Fre-yin/DNST-Delvers-Core/security/policy).
 
 Frieren ist eine Vorabversion. Sicherheitskorrekturen sind für die jeweils aktuelle veröffentlichte Version vorgesehen. Für ältere Versionen werden keine separaten Sicherheitsupdates zugesichert.
 
@@ -30,7 +30,7 @@ Allgemeine Fehler und Funktionswünsche ohne Sicherheitsbezug gehören in die ö
 
 ### Scope
 
-This policy applies to Dungeon Settlers Delvers: Frieren and its MelonLoader and BepInEx packages. Frieren requires Delvers Core. If a report concerns Core alone, use the [Core security policy](https://github.com/Fre-yin/DNST-Delvers-Core/security/policy).
+This policy applies to Dungeon Settlers Delvers: Frieren and its BepInEx package. Frieren requires Delvers Core. If a report concerns Core alone, use the [Core security policy](https://github.com/Fre-yin/DNST-Delvers-Core/security/policy).
 
 Frieren is a prerelease. Security fixes are intended for the latest published version. Separate security updates for older versions are not guaranteed.
 

@@ -2,19 +2,15 @@
 
 [English](BUILDING.en.md)
 
-Diese Quellfassung enthält nur Frieren, seine Adapter, Tests und vier Laufzeit-PNGs. Der Core-Code wird nicht dupliziert. Benötigt werden die öffentliche Core-0.4.1-Quelle mit API 1.4.0, PowerShell 7, ein .NET SDK mit .NET-6-Targeting-Pack sowie je eine initialisierte lokale Spielkopie für MelonLoader 0.7.3 und BepInEx 6 Unity IL2CPP x64.
+Diese Quellfassung enthält nur Frieren, seine Adapter, Tests, zwölf Laufzeit-PNGs und drei Töne. Der Core-Code wird nicht dupliziert. Ab 0.5.0 gibt es Delvers nur noch für BepInEx, MelonLoader wird nicht mehr unterstützt. Benötigt werden die öffentliche Core-0.5.0-Quelle, PowerShell 7, ein .NET SDK mit .NET-6-Targeting-Pack und eine initialisierte lokale Spielkopie mit BepInEx 6 Unity IL2CPP x64.
 
 ```powershell
-$CoreSourceDir = Read-Host 'Pfad zur Core-0.4.1-Quellfassung'
-$MelonGameDir = Read-Host 'Pfad zur MelonLoader-Spielkopie'
+$CoreSourceDir = Read-Host 'Pfad zur Core-0.5.0-Quellfassung'
 $BepInExGameDir = Read-Host 'Pfad zur BepInEx-Spielkopie'
-pwsh -File .\Build-Release.ps1 -ValidateOnly `
-  -CoreSourceDir $CoreSourceDir `
-  -MelonGameDir $MelonGameDir `
-  -BepInExGameDir $BepInExGameDir
+pwsh -File .\Build-Release.ps1 -ValidateOnly -CoreSourceDir $CoreSourceDir -BepInExGameDir $BepInExGameDir
 ```
 
-Das Skript prüft die Core- und Frieren-Paketversion, restauriert offline über `NuGet.Config`, baut Frieren und beide Adapter mit einem Projektverweis auf die separate Core-Quelle und führt die Frieren-Regeltests für beide Loader aus. Es prüft die beiden Frieren-DLLs und vier PNGs. Im Release-Build wurden 47 von 47 Frieren-Prüfungen je Loader ohne Buildwarnungen oder Fehler bestanden. `-ValidateOnly` erstellt kein ZIP, installiert nichts und veröffentlicht nichts.
+Das Skript prüft die Core- und Frieren-Paketversion, restauriert offline über `NuGet.Config`, baut Frieren und den BepInEx-Adapter mit einem Projektverweis auf die separate Core-Quelle und führt die Frieren-Regeltests aus. Es prüft die beiden Frieren-DLLs, zwölf PNGs und drei Töne. Beim letzten Lauf am Stand 0.5.0 bestanden 91 Frieren-Prüfungen ohne Buildwarnungen oder Fehler. `-ValidateOnly` erstellt kein ZIP, installiert nichts und veröffentlicht nichts.
 
 Frieren enthält keine Core-DLL im Installationspaket. Die PNGs unter `Frieren/Assets/` sind die einzigen mitgelieferten Grafiken. Spiel- und Loader-Referenzen werden lokal über `GameReferences.props` gelesen und nicht verteilt.
 

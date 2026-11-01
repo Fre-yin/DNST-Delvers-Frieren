@@ -1,9 +1,4 @@
 using HarmonyLib;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using UnityEngine;
-using Il2CppList = Il2CppSystem.Collections.Generic.List<string>;
-using ItemList = Il2CppSystem.Collections.Generic.List<Il2CppSystem.ValueTuple<string, int>>;
 
 namespace FrierenPortrait;
 
@@ -12,13 +7,13 @@ internal static class FrierenTraitTooltipPatch
 {
     internal static bool RenderingArchmage;
 
-    private static void Prefix(AffecterTableData __0)
-        => RenderingArchmage = __0?.Key == FrierenGameplay.TraitKey;
+    private static void Prefix(AffecterTableData data)
+        => RenderingArchmage = data?.Key == FrierenGameplay.TraitKey;
 
-    private static void Postfix(Tooltip_Affecter __instance, AffecterTableData __0)
+    private static void Postfix(Tooltip_Affecter __instance, AffecterTableData data)
     {
         RenderingArchmage = false;
-        if (__0?.Key != FrierenGameplay.TraitKey) return;
+        if (data?.Key != FrierenGameplay.TraitKey) return;
         // The extra row reuses the prefab's native value rows, so it inherits the
         // stat-row font/color and stays in the layout before the description.
         __instance.AddStatRow(FrierenLocalization.TraitMasteryKey, string.Empty);
@@ -38,22 +33,22 @@ internal static class FrierenTraitStatRowNamePatch
 
     private static readonly bool[] RowLogged = new bool[NamedRows.Length];
 
-    private static void Prefix(ref string __0, ref string __1)
+    private static void Prefix(ref string textKey, ref string value)
     {
-        if (!FrierenTraitTooltipPatch.RenderingArchmage || string.IsNullOrEmpty(__0)) return;
+        if (!FrierenTraitTooltipPatch.RenderingArchmage || string.IsNullOrEmpty(textKey)) return;
         for (var i = 0; i < NamedRows.Length; i++)
         {
             // Tooltip_Base.StatsToRows passes the localized stat name, not a text key.
             // Its fallback for a missing name is the key without the STATUS_ prefix.
             var statName = NamedRows[i].Stat.ToString();
-            if (__0 != TextKeyExtensions.GetName("STATUS_" + statName) && __0 != statName) continue;
+            if (textKey != TextKeyExtensions.GetName("STATUS_" + statName) && textKey != statName) continue;
             if (!RowLogged[i])
             {
                 RowLogged[i] = true;
-                DelversHost.Info($"FRIEREN_TOOLTIP_NAMED_ROW stat={statName} nativeName={__0}");
+                DelversHost.Info($"FRIEREN_TOOLTIP_NAMED_ROW stat={statName} nativeName={textKey}");
             }
-            __0 = NamedRows[i].TextKey;
-            __1 = string.Empty;
+            textKey = NamedRows[i].TextKey;
+            value = string.Empty;
             return;
         }
     }
@@ -64,9 +59,9 @@ internal static class FrierenTraitGrantedSkillsTooltipPatch
 {
     private static bool capacityWarningLogged;
 
-    private static void Postfix(Tooltip_Affecter __instance, string __0)
+    private static void Postfix(Tooltip_Affecter __instance, string key)
     {
-        if (__0 != FrierenGameplay.TraitKey) return;
+        if (key != FrierenGameplay.TraitKey) return;
         try
         {
             var slots = __instance._skills;

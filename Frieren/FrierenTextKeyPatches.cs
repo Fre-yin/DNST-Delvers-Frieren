@@ -1,52 +1,23 @@
 using HarmonyLib;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using UnityEngine;
-using Il2CppList = Il2CppSystem.Collections.Generic.List<string>;
-using ItemList = Il2CppSystem.Collections.Generic.List<Il2CppSystem.ValueTuple<string, int>>;
 
 namespace FrierenPortrait;
 
-[HarmonyPatch(typeof(TextKeyExtensions), nameof(TextKeyExtensions.GetName))]
-internal static class FrierenTraitNamePatch
-{
-    private static bool Prefix(string __0, ref string __result)
-    {
-        if (__0 != FrierenGameplay.TraitKey) return true;
-        __result = FrierenGameplay.TraitName;
-        return false;
-    }
-}
-
-[HarmonyPatch(typeof(TextKeyExtensions), nameof(TextKeyExtensions.GetDesc))]
-internal static class FrierenTraitDescriptionPatch
-{
-    private static bool Prefix(string __0, ref string __result)
-    {
-        if (__0 != FrierenGameplay.TraitKey) return true;
-        __result = FrierenGameplay.TraitDescription;
-        return false;
-    }
-}
-
-[HarmonyPatch(typeof(TextKeyExtensions), nameof(TextKeyExtensions.GetFlavor))]
-internal static class FrierenTraitFlavorPatch
-{
-    private static bool Prefix(string __0, ref string __result)
-    {
-        if (__0 != FrierenGameplay.TraitKey) return true;
-        __result = FrierenGameplay.TraitFlavor;
-        return false;
-    }
-}
+// Every hook on TextKeyExtensions runs for each text the game shows and costs a managed
+// string per call, so only the lookups the text table cannot answer are hooked:
+// - GetName/GetDesc/GetFlavor read "TEXTKEY_<key>_NAME|_DESC|_FLAVOR" from the table;
+//   FrierenLocalization registers those rows, so they need no hook.
+// - GetNameText and TryGetNameTextIncludeRemnant return a key without the TEXTKEY
+//   prefix unchanged, so Frieren's name key "Frieren" needs them for her localized name.
+// - GetText reports "TextKey not found" when the text equals its key, which is the case
+//   for "Frieren" in every Latin-script language (self-test).
 
 [HarmonyPatch(typeof(TextKeyExtensions), nameof(TextKeyExtensions.GetNameText))]
 internal static class FrierenNameTextPatch
 {
-    private static bool Prefix(string __0, ref string __result)
+    private static bool Prefix(string nameTextKey, ref string __result)
     {
-        if (__0 != FrierenGameplay.NameKey && __0 != FrierenGameplay.LegacyNameKey) return true;
-        __result = "Frieren";
+        if (nameTextKey != FrierenGameplay.NameKey && nameTextKey != FrierenGameplay.LegacyNameKey) return true;
+        __result = FrierenLocalization.Name;
         return false;
     }
 }
@@ -54,10 +25,10 @@ internal static class FrierenNameTextPatch
 [HarmonyPatch(typeof(TextKeyExtensions), nameof(TextKeyExtensions.GetText))]
 internal static class FrierenRawNameTextPatch
 {
-    private static bool Prefix(string __0, ref string __result)
+    private static bool Prefix(string textKey, ref string __result)
     {
-        if (__0 != FrierenGameplay.NameKey && __0 != FrierenGameplay.LegacyNameKey) return true;
-        __result = "Frieren";
+        if (textKey != FrierenGameplay.NameKey && textKey != FrierenGameplay.LegacyNameKey) return true;
+        __result = FrierenLocalization.Name;
         return false;
     }
 }
@@ -65,10 +36,10 @@ internal static class FrierenRawNameTextPatch
 [HarmonyPatch(typeof(TextKeyExtensions), nameof(TextKeyExtensions.TryGetNameTextIncludeRemnant))]
 internal static class FrierenRemnantNameTextPatch
 {
-    private static bool Prefix(string __0, ref string __result)
+    private static bool Prefix(string nameTextKey, ref string __result)
     {
-        if (__0 != FrierenGameplay.NameKey && __0 != FrierenGameplay.LegacyNameKey) return true;
-        __result = "Frieren";
+        if (nameTextKey != FrierenGameplay.NameKey && nameTextKey != FrierenGameplay.LegacyNameKey) return true;
+        __result = FrierenLocalization.Name;
         return false;
     }
 }

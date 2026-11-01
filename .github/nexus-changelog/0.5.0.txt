@@ -1,0 +1,11 @@
+Requires Delvers Core 0.5.0. Update Core and Frieren together. With Core 0.4.1, Frieren stays off and says so in the log.
+New: Frieren's own spell Zoltraak. From a turning magic circle she channels a beam for three seconds that strikes the first enemy in a line with 15 hits of 40% of her magic attack each. An obstacle in the way catches the beam; destructible obstacles take the damage, including your own buildings, trees and ore. Each hit adds a stack of Zoltraak Break, which lowers physical and magic resistance. The beam ends in a point of light, and casting, the shot and the beam have their own sounds. Frieren also learns it in existing campaigns the next time they are loaded.
+Important: A save written with 0.5.0 contains Zoltraak. It no longer loads cleanly with Frieren 0.4.x or without Frieren, and Core then blocks saving. Back up your saves before updating.
+Fixed: Locking a character's stats or traits when starting a new campaign and rerolling could produce Frieren, and her fixed values then overrode the lock. With an active lock, Frieren is no longer drawn unless the slot is set to her profile.
+Fixed: Frieren could vanish for good after a crash while recruiting. This needs Core 0.5.0.
+New: on the first recruitment, Frieren logs which other mods change the same places of the game. This helps with bug reports.
+Fixed: If reconciling Frieren's spells failed after loading, saving stayed blocked until the game was restarted. The error is now only reported.
+Frieren's name now appears in each game language's own script: 프리렌, Фрирен, 芙莉莲, 芙莉蓮 and フリーレン. Other languages keep Frieren.
+Performance: Frieren no longer checks her registration every frame, only about every two seconds as a fallback, and no longer allocates memory while idle. She also no longer hooks into every text lookup of the game.
+More robust against game updates: Frieren now reads values from game methods by name instead of position.
+Tested under BepInEx on DS_B.0.4.29, together with Extended Hotbar 1.0.2.

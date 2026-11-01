@@ -192,24 +192,24 @@ internal static class FrierenRecruitment
 [HarmonyPatch(typeof(SubUI_CandidateCard), nameof(SubUI_CandidateCard.SetCard))]
 internal static class FrierenCardPricePatch
 {
-    private static void Postfix(SubUI_CandidateCard __instance, RecruitCandidateData __0)
-        => FrierenRecruitment.ShowPrice(__instance._recruitPrice, __0, true);
+    private static void Postfix(SubUI_CandidateCard __instance, RecruitCandidateData candidate)
+        => FrierenRecruitment.ShowPrice(__instance._recruitPrice, candidate, true);
 }
 
 [HarmonyPatch(typeof(SubUI_CandidateDetailPanel), nameof(SubUI_CandidateDetailPanel.SetSelectedCandidate))]
 internal static class FrierenDetailPricePatch
 {
-    private static void Postfix(SubUI_CandidateDetailPanel __instance, int __0, RecruitCandidateData __1)
-        => FrierenRecruitment.ShowPrice(__instance._recruitPrice, __1, false);
+    private static void Postfix(SubUI_CandidateDetailPanel __instance, RecruitCandidateData candidate)
+        => FrierenRecruitment.ShowPrice(__instance._recruitPrice, candidate, false);
 }
 
 [HarmonyPatch(typeof(EntityEventHandler), nameof(EntityEventHandler.OnEvent),
     new[] { typeof(CandidateRecruitRequested) })]
 internal static class FrierenRecruitTransactionPatch
 {
-    private static bool Prefix(EntityEventHandler __instance, CandidateRecruitRequested __0,
+    private static bool Prefix(EntityEventHandler __instance, CandidateRecruitRequested msg,
         out FrierenRecruitment.Transaction __state)
-        => FrierenRecruitment.Begin(__instance, __0, out __state);
+        => FrierenRecruitment.Begin(__instance, msg, out __state);
 
     private static void Postfix(EntityEventHandler __instance, FrierenRecruitment.Transaction __state)
         => FrierenRecruitment.Complete(__instance, __state);

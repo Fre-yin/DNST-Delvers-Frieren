@@ -2,19 +2,15 @@
 
 [Deutsch](BUILDING.md)
 
-This source distribution contains only Frieren, its adapters, tests, and four runtime PNGs. Core code is not duplicated. You need the public Core 0.4.1 source with API 1.4.0, PowerShell 7, a .NET SDK with the .NET 6 targeting pack, and initialized local game copies for MelonLoader 0.7.3 and BepInEx 6 Unity IL2CPP x64.
+This source distribution contains only Frieren, its adapters, tests, twelve runtime PNGs, and three sounds. Core code is not duplicated. From 0.5.0 on, Delvers is available for BepInEx only; MelonLoader is no longer supported. You need the public Core 0.5.0 source, PowerShell 7, a .NET SDK with the .NET 6 targeting pack, and an initialized local game copy with BepInEx 6 Unity IL2CPP x64.
 
 ```powershell
-$CoreSourceDir = Read-Host 'Path to the Core 0.4.1 source'
-$MelonGameDir = Read-Host 'Path to the MelonLoader game copy'
+$CoreSourceDir = Read-Host 'Path to the Core 0.5.0 source'
 $BepInExGameDir = Read-Host 'Path to the BepInEx game copy'
-pwsh -File .\Build-Release.ps1 -ValidateOnly `
-  -CoreSourceDir $CoreSourceDir `
-  -MelonGameDir $MelonGameDir `
-  -BepInExGameDir $BepInExGameDir
+pwsh -File .\Build-Release.ps1 -ValidateOnly -CoreSourceDir $CoreSourceDir -BepInExGameDir $BepInExGameDir
 ```
 
-The script checks Core and Frieren package versions, restores offline through `NuGet.Config`, builds Frieren and both adapters with a project reference to the separate Core source, and runs the Frieren rule tests for both loaders. It verifies the two Frieren DLLs and four PNGs. The Release build passed 47 of 47 Frieren checks per loader with zero build warnings or errors. `-ValidateOnly` creates no ZIP, installs nothing, and publishes nothing.
+The script checks Core and Frieren package versions, restores offline through `NuGet.Config`, builds Frieren and the BepInEx adapter with a project reference to the separate Core source, and runs the Frieren rule tests. It verifies the two Frieren DLLs, twelve PNGs, and three sounds. In the last run on the 0.5.0 state, 91 Frieren checks passed with zero build warnings or errors. `-ValidateOnly` creates no ZIP, installs nothing, and publishes nothing.
 
 The Frieren installation package contains no Core DLL. The PNGs under `Frieren/Assets/` are the only distributed graphics. Game and loader references are read locally through `GameReferences.props` and are not distributed.
 
