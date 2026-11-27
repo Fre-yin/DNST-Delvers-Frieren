@@ -16,14 +16,18 @@ $loaders = if ($Melon) { @('Melon', 'BepInEx') } else { @('BepInEx') }
 $root = $PSScriptRoot
 $core = [IO.Path]::GetFullPath($CoreSourceDir)
 if (!(Test-Path -LiteralPath (Join-Path $core 'Core\DungeonSettlersDelvers.Core.csproj') -PathType Leaf)) {
-    throw 'The Core source checkout of the same version is required. Pass its root with -CoreSourceDir.'
+    throw 'A Core source checkout of the same major and minor version is required. Pass its root with -CoreSourceDir.'
 }
 $coreProps = [xml](Get-Content -LiteralPath (Join-Path $core 'Directory.Build.props') -Raw)
 $frierenProps = [xml](Get-Content -LiteralPath (Join-Path $root 'Directory.Build.props') -Raw)
-# The version is written once, in Directory.Build.props; Frieren builds against the Core source of the same version.
+# The version is written once, in Directory.Build.props; Frieren builds against a Core source of the same major and minor version
+# (Frieren 0.5.0 against Core 0.5.0 or a later 0.5).
 $frierenVersion = @($frierenProps.Project.PropertyGroup.Version | Where-Object { $_ }) | Select-Object -First 1
-if ([string]::IsNullOrWhiteSpace($frierenVersion) -or $coreProps.Project.PropertyGroup.Version -ne $frierenVersion) {
-    throw "Frieren $frierenVersion requires the Core $frierenVersion source checkout."
+$coreVersion = @($coreProps.Project.PropertyGroup.Version | Where-Object { $_ }) | Select-Object -First 1
+$frierenMinor = if ($frierenVersion) { ($frierenVersion -split '\.')[0..1] -join '.' } else { '' }
+$coreMinor = if ($coreVersion) { ($coreVersion -split '\.')[0..1] -join '.' } else { '' }
+if ([string]::IsNullOrWhiteSpace($frierenVersion) -or $coreMinor -ne $frierenMinor) {
+    throw "Frieren $frierenVersion requires a Core $frierenMinor source checkout."
 }
 $nuget = Join-Path $root 'NuGet.Config'
 # Every PNG of the Frieren package with its exact width and height, and the sounds: the same tables as the project's

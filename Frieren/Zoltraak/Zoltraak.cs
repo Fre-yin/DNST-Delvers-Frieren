@@ -38,7 +38,7 @@ internal static partial class Zoltraak
     // resistance for 12 s, at most 30 stacks (two full channels).
     internal const int Ticks = 15;
     internal const float TickInterval = 0.2f;
-    // Share of the caster's final magic attack power per hit, in percent (25 after the Toolkit's standard measurement, then 40). Fixed in a
+    // Share of the caster's final magic attack power per hit, in percent (25 after the standard measurement, then 40). Fixed in a
     // release; a Core test campaign may change it for measuring (SetHitPercentForTest).
     internal const float DefaultHitPercent = 40f;
     // Share of each hit that goes surely to the head (20 %, final word
@@ -182,7 +182,7 @@ internal static partial class Zoltraak
             }
             // DamageProperty is a flag set. The game has no "body only": a normal hit lands wholly on
             // head or body, picked by weight (DamageSimulator.CalculateTargetStat; about 35 % went to
-            // the head in the Toolkit's standard). The head share comes on top.
+            // the head in the standard measurement). The head share comes on top.
             // AlwaysHit: a focused beam must not be dodged ("Miss" in the test video).
             var body = Execution.Damage(target, DataValue.SelfCoef(share * BodyShare, StatType.MagicAttackPower),
                 magic, ranged, DamageProperty.AlwaysHit);

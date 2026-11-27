@@ -64,7 +64,7 @@ internal static class FrierenLocalization
         Row(TraitFlavorKey,
             "What kind of magic do I like most? The kind that makes a simple field of flowers bloom.",
             "내가 가장 좋아하는 마법? 그저 평범한 꽃밭을 피워 내는 마법.",
-            "Quelle magie est-ce que je préfère ? Celle qui fait fleurir un simple champ de fleurs.",
+            "Ma magie préférée ? Celle qui fait fleurir un simple champ de fleurs.",
             "Welche Magie ich am meisten mag? Die, die ein einfaches Blumenfeld erblühen lässt.",
             "Какая магия мне нравится больше всего? Та, от которой расцветает самое обычное поле цветов.",
             "我最喜欢什么魔法？能让一片普通花田盛开的魔法。", "我最喜歡什麼魔法？能讓一片普通花田盛開的魔法。",

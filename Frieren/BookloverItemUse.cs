@@ -40,7 +40,7 @@ internal static class BookloverItemUse
         var data = current?.TryCast<CustomExecutionData>()?.Data?.TryCast<RemoveCarryItemApplyData>();
         if (data?.Owner == null || data.Amount != 1 || !Booklover.HasTrait(data.Owner)) return;
         PruneExpiredReadMarks();
-        MarkedReadApplies[data.Pointer] = (data, Time.realtimeSinceStartup + ReadApplyMarkLifetimeSeconds);
+        MarkedReadApplies[data.Pointer] = (data, FrierenGameClock.Now + ReadApplyMarkLifetimeSeconds);
         DelversHost.Info("BOOKLOVER_READ_APPLY_MARKED item=" + (usedItemKey ?? "unknown"));
     }
 
@@ -53,7 +53,7 @@ internal static class BookloverItemUse
             PruneExpiredReadMarks();
             return;
         }
-        if (Time.realtimeSinceStartup > marked.Expires) return;
+        if (FrierenGameClock.Now > marked.Expires) return;
         if (AuthorizeConsumption(marked.Data))
             DelversHost.Info("BOOKLOVER_CONSUMPTION_AUTHORIZED");
         else
@@ -63,7 +63,7 @@ internal static class BookloverItemUse
     private static void PruneExpiredReadMarks()
     {
         if (MarkedReadApplies.Count == 0) return;
-        var now = Time.realtimeSinceStartup;
+        var now = FrierenGameClock.Now;
         foreach (var key in MarkedReadApplies.Where(entry => now > entry.Value.Expires)
                      .Select(entry => entry.Key).ToArray())
             MarkedReadApplies.Remove(key);
@@ -78,7 +78,7 @@ internal static class BookloverItemUse
             || carried.Amount < 1) return false;
         AuthorizedConsumptions[owner.Guid.ToString()] =
             (carried.Guid.ToString(), carried.Amount,
-                Time.realtimeSinceStartup + ConsumptionAuthorizationLifetimeSeconds);
+                FrierenGameClock.Now + ConsumptionAuthorizationLifetimeSeconds);
         return true;
     }
 
@@ -87,7 +87,7 @@ internal static class BookloverItemUse
         if (owner == null || carried == null) return false;
         var id = owner.Guid.ToString();
         if (!AuthorizedConsumptions.TryGetValue(id, out var pending)) return false;
-        if (Time.realtimeSinceStartup > pending.Expires)
+        if (FrierenGameClock.Now > pending.Expires)
         {
             AuthorizedConsumptions.Remove(id);
             DelversHost.Info("BOOKLOVER_CONSUMPTION_AUTH_EXPIRED");

@@ -4,7 +4,7 @@
 
 Frieren is an optional character pack for Dungeon Settlers Delvers. You can recruit her as a unique elven mage in Custom Expedition or through the guild. She has her own biography and portraits, the legendary Elven Archmage background, and the Booklover trait. Her story follows her search for rare spells into the awakened dungeon core.
 
-**Version 0.5.0 requires Delvers Core 0.5.0.** Install both together, Core first. Download `DelversFrieren-0.5.0-BepInEx.zip` from [Releases](../../releases). Version 0.5.0 is for BepInEx only; the MelonLoader versions up to 0.4.1 are being archived. GitHub's automatically generated source archives cannot be installed as mods.
+**Version 0.5.1 requires Delvers Core 0.5.0.** Install both together, Core first. Download `DelversFrieren-0.5.1-BepInEx.zip` from [Releases](../../releases). Version 0.5.1 is for BepInEx only; the MelonLoader versions up to 0.4.1 are being archived. GitHub's automatically generated source archives cannot be installed as mods.
 
 ## Frieren in the game
 

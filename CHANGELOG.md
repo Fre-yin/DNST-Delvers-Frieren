@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.1: 27.11.2026
+
+- Läuft im Dungeon Settlers Modded Loader auch, wenn Frieren einen eigenen Ordner hat. Bilder und Töne findet sie neben ihrer eigenen Datei.
+- Behoben: Brach der Zoltraak ab, ohne regulär zu enden, lief sein Ton weiter.
+- Behoben: Ein Satz im französischen Text eines Traits.
+- Benötigt weiter Delvers Core 0.5.0 oder neuer.
+- Geprüft: 133 Frieren Prüfungen ohne Buildwarnungen, im Spiel zusammen mit Core 0.5.2.
+
 ## 0.5.0: 01.11.2026
 
 - Benötigt Delvers Core 0.5.0. Version 0.5.0 gibt es nur für BepInEx; die MelonLoader-Fassungen bis 0.4.1 werden archiviert. Mit Core 0.4.1 bleibt Frieren aus und meldet das im Log.

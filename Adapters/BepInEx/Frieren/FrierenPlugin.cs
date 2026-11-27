@@ -10,7 +10,7 @@ using FrierenPortrait;
 
 namespace DungeonSettlersDelvers.Frieren.BepInEx;
 
-[BepInPlugin(Id, "Dungeon Settlers Delvers: Frieren", "0.5.0")]
+[BepInPlugin(Id, "Dungeon Settlers Delvers: Frieren", "0.5.1")]
 [BepInProcess("DungeonSettlers.exe")]
 // BepInEx 6 reads this as a version range: a bare "0.4.0" allowed only exactly Core 0.4.0.
 // The real gate is the Core API check in Load().

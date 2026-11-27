@@ -12,6 +12,31 @@ void Check(bool condition, string name)
     Console.WriteLine("PASS: " + name);
 }
 
+// Amfi's mod loader puts Core and Frieren into folders of their own: Frieren finds its files next to its own DLL first, then
+// next to Core's, then in the old Mods folder (FrierenAssetFolderRules).
+{
+    var root = Path.Combine(Path.GetTempPath(), "frieren-asset-folders-" + Guid.NewGuid().ToString("N").Substring(0, 8));
+    var coreDir = Path.Combine(root, "BepInEx", "plugins", "delvers-core");
+    var frierenDir = Path.Combine(root, "BepInEx", "plugins", "delvers-frieren");
+    var legacy = Path.Combine(root, "Mods", "FrierenPortraitAssets");
+    Directory.CreateDirectory(Path.Combine(frierenDir, FrierenAssetFolderRules.SubFolder));
+    Directory.CreateDirectory(coreDir);
+    bool Holds(string folder) => File.Exists(Path.Combine(folder, "Frieren_Normal.png"));
+    File.WriteAllText(Path.Combine(frierenDir, FrierenAssetFolderRules.SubFolder, "Frieren_Normal.png"), "x");
+    var split = FrierenAssetFolderRules.Pick(frierenDir, coreDir, legacy, Holds);
+    Directory.CreateDirectory(Path.Combine(coreDir, FrierenAssetFolderRules.SubFolder));
+    File.WriteAllText(Path.Combine(coreDir, FrierenAssetFolderRules.SubFolder, "Frieren_Normal.png"), "x");
+    var both = FrierenAssetFolderRules.Pick(frierenDir, coreDir, legacy, Holds);
+    var shared = FrierenAssetFolderRules.Pick(coreDir, coreDir, legacy, Holds);
+    var coreOnly = FrierenAssetFolderRules.Pick(Path.Combine(root, "elsewhere"), coreDir, legacy, Holds);
+    var none = FrierenAssetFolderRules.Pick(Path.Combine(root, "a"), Path.Combine(root, "b"), legacy, Holds);
+    var noCore = FrierenAssetFolderRules.Pick(frierenDir, null, legacy, Holds);
+    Directory.Delete(root, true);
+    Check(split == Path.Combine(frierenDir, "Frieren") && both == Path.Combine(frierenDir, "Frieren") && shared == Path.Combine(coreDir, "Frieren")
+            && coreOnly == Path.Combine(coreDir, "Frieren") && none == Path.Combine(root, "b", "Frieren") && noCore == Path.Combine(frierenDir, "Frieren"),
+        "asset folders: Frieren's own plugin folder first, then Core's, the old Mods folder last; without files Core's folder for the error");
+}
+
 Check(FrierenNameMigrationRules.ShouldMigrate("frieren-profile", "old-name-key",
     "frieren-profile", "old-name-key", "Frieren"), "legacy Frieren key migrates");
 Check(!FrierenNameMigrationRules.ShouldMigrate("frieren-profile", "Mira",
@@ -492,6 +517,15 @@ Check(FrierenRecruitPatchAuditRules.Foreign(new[] { "fre-yin.dungeonsettlers.del
 
     Check(frierenSourceDirectory != null && problems.Count == 0,
         "numbers in Frieren's texts, log lines and developer comments equal their constants (" + string.Join("; ", problems) + ")");
+
+    // Game texts carry no hyphen or dash (the rule for new texts): every row of FrierenLocalization in all ten languages; the rows
+    // of the test mode exist only in test builds and are left out.
+    var releaseRows = Regex.Replace(localizationSource, @"#if [A-Z]+_QA\b.*?#endif", "", RegexOptions.Singleline);
+    var rowKeys = Regex.Matches(releaseRows, @"\bRow\(([\w.]+),").Select(match => match.Groups[1].Value).Distinct().ToList();
+    var hyphened = rowKeys.SelectMany(key => RowTexts(releaseRows, key).Where(text => text.IndexOfAny(new[] { '-', '\u2013', '\u2014' }) >= 0)
+        .Select(text => key + ": " + text)).ToList();
+    Check(frierenSourceDirectory != null && rowKeys.Count > 10 && hyphened.Count == 0,
+        "Frieren's game texts carry no hyphen or dash in any language (" + string.Join("; ", hyphened) + ")");
 }
 
 // The channel's fallback: when the lazy routine cannot be created (its registration or creation failed), the ticks are

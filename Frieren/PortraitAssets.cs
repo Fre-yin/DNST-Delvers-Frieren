@@ -18,8 +18,22 @@ internal sealed class PortraitAssets : IDisposable
     internal static string LegacyAssetFolder => Path.Combine(
         Path.GetDirectoryName(Application.dataPath), "Mods", "FrierenPortraitAssets");
 
-    internal static string AssetFolder => HasRuntimeFiles(PackagedAssetFolder) ? PackagedAssetFolder
-        : HasRuntimeFiles(LegacyAssetFolder) ? LegacyAssetFolder : PackagedAssetFolder;
+    // The folder of Frieren's own DLL: in Amfi's mod loader Frieren is a mod of its own, next to Core's (FrierenAssetFolderRules).
+    internal static string OwnPluginDirectory
+    {
+        get
+        {
+            try
+            {
+                var location = typeof(PortraitAssets).Assembly.Location;
+                return string.IsNullOrEmpty(location) ? null : Path.GetDirectoryName(location);
+            }
+            catch (Exception) { return null; }
+        }
+    }
+
+    internal static string AssetFolder => FrierenAssetFolderRules.Pick(OwnPluginDirectory,
+        Path.GetDirectoryName(PackagedAssetFolder), LegacyAssetFolder, HasRuntimeFiles);
 
     internal static void ValidateFiles()
     {

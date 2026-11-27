@@ -190,6 +190,8 @@ internal static class FrierenMagicSkills
             pending.Entity = entity;
             if (container != null) pending.Container = container;
             pending.TraitAlreadyScheduled |= traitAlreadyScheduled;
+            // Real time on purpose: the retry waits across a scene or campaign change, when the game's tick stands still
+            // (the author's timers on game time, leave this technical wait out).
             pending.Deadline = Time.realtimeSinceStartup + 5f;
             return;
         }

@@ -369,6 +369,9 @@ internal static class ZoltraakBeam
                     if (beam.Ending) beam.EndTimer -= step;
                     if ((beam.Ending && beam.EndTimer <= 0f) || beam.SinceTick > (beam.Firing ? TickTimeout : StartTimeout))
                     {
+                        // A channel that ended without its finish (broken off, a failed tick) never stopped the beam's sound: no tick
+                        // for TickTimeout ends it here with the beam. After a finish it has stopped already.
+                        if (!beam.Ending) ZoltraakSound.StopLoop(key);
                         UnityEngine.Object.Destroy(beam.Root);
                         Active.Remove(key);
                         continue;

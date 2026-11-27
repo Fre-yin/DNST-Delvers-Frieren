@@ -1,4 +1,4 @@
-DUNGEON SETTLERS DELVERS: FRIEREN 0.5.0
+DUNGEON SETTLERS DELVERS: FRIEREN 0.5.1
 
 Installiere zuerst Delvers Core 0.5.0. Version 0.5.0 gibt es nur für BepInEx. Sichere deine Spielstände vor dem Update und entferne die alte DungeonSettlersFrierenPortrait.dll aus BepInEx/plugins, Mods oder UserLibs. Ab 0.5.0 lernt Frieren ihren Zauber Zoltraak, auch in bestehenden Kampagnen. Ein damit gespeicherter Spielstand lässt sich mit Frieren 0.4.x oder ohne Frieren nicht mehr sauber laden. Ältere Spielstände werden beim Laden umgestellt und lassen sich nach dem Speichern nicht mehr mit Frieren 0.3.x laden.
 

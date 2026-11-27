@@ -62,7 +62,7 @@ internal static class FrierenCampaignHistory
         if (clan != null) ObservePlayerUnits(entities, clan.CampaignGuid);
     }
 
-    // A player unit without a profile (Toolkit's dummy from SpawnUnitRequested, sammelblock 185848) throws a
+    // A player unit without a profile (the Toolkit's dummy from SpawnUnitRequested) throws a
     // NullReferenceException inside the game's UnitEntity.ProfileKey (UnitProfileReader.GetProfileKey). It reaches managed code
     // as an Il2CppException (catching NullReferenceException alone missed it); such a unit is no Frieren.
     private static string ProfileKeyOf(UnitEntity unit)

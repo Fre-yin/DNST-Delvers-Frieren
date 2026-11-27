@@ -4,7 +4,7 @@
 
 Frieren ist ein zusätzliches Charakterpaket für Dungeon Settlers Delvers. Du kannst sie im Modus „Eigene Expedition“ und über die Gilde als einzigartige Elfenmagierin rekrutieren. Sie hat eine eigene Biografie, Porträts, den legendären Hintergrund „Elfische Erzmagierin“ und die Eigenschaft „Bücherwurm“. Ihre Geschichte verbindet die Suche nach seltenen Zaubern mit einer Expedition zum erwachten Dungeonkern.
 
-**Version 0.5.0 benötigt Delvers Core 0.5.0.** Installiere beide zusammen und Core zuerst. Unter [Releases](../../releases) findest du `DelversFrieren-0.5.0-BepInEx.zip`. Version 0.5.0 gibt es nur für BepInEx; die MelonLoader-Fassungen bis 0.4.1 werden archiviert. Die automatisch von GitHub erzeugten Quellarchive lassen sich nicht als Mod installieren.
+**Version 0.5.1 benötigt Delvers Core 0.5.0.** Installiere beide zusammen und Core zuerst. Unter [Releases](../../releases) findest du `DelversFrieren-0.5.1-BepInEx.zip`. Version 0.5.1 gibt es nur für BepInEx; die MelonLoader-Fassungen bis 0.4.1 werden archiviert. Die automatisch von GitHub erzeugten Quellarchive lassen sich nicht als Mod installieren.
 
 ## Frieren im Spiel
 

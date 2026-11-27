@@ -177,17 +177,17 @@ internal static class FrierenGameplay
         // and generating her does not alter the campaign's random state.
         if (level > 1)
         {
-            var previousRandom = UnityEngine.Random.state;
+            var previousRandom = UnityEngine.Random.state; // trap-ok: Falle 12: the game's own level growth draws, seeded per level and put back
             try
             {
                 if (helper._levelUpHelper == null) helper._levelUpHelper = new LevelUpHelper();
                 for (var nextLevel = 2; nextLevel <= level; nextLevel++)
                 {
-                    UnityEngine.Random.InitState(20260924 + nextLevel);
+                    UnityEngine.Random.InitState(20260924 + nextLevel); // trap-ok: Falle 12: fixed seed per level, the same stats on every player
                     helper.ApplyLevelUpMajorStatGrowth(stats, talents);
                 }
             }
-            finally { UnityEngine.Random.state = previousRandom; }
+            finally { UnityEngine.Random.state = previousRandom; } // trap-ok: Falle 12: the game's random state goes back as it was
         }
     }
 

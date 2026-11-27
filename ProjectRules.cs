@@ -423,3 +423,22 @@ internal static class FrierenRecruitPatchAuditRules
         => "FRIEREN_RECRUIT_PATCH_AUDIT target=" + target + " found=" + (found ? 1 : 0)
             + " foreign=" + (foreign == null || foreign.Count == 0 ? "-" : string.Join(",", foreign));
 }
+
+// Where Frieren's images and sounds lie (Amfi's mod loader, each mod gets its own plugin folder, so Frieren's files lie
+// next to Frieren's DLL and not next to Core's). The first folder that holds the four runtime images, in this order: Frieren's own
+// plugin folder, Core's, the old Mods folder. When none holds them, Core's folder (the error then names it), else Frieren's own.
+internal static class FrierenAssetFolderRules
+{
+    internal const string SubFolder = "Frieren";
+
+    internal static string Pick(string ownPluginDirectory, string corePackageDirectory, string legacyFolder, Func<string, bool> holdsFiles)
+    {
+        var own = Sub(ownPluginDirectory);
+        var core = Sub(corePackageDirectory);
+        foreach (var candidate in new[] { own, core, legacyFolder })
+            if (candidate != null && holdsFiles != null && holdsFiles(candidate)) return candidate;
+        return core ?? own ?? legacyFolder;
+    }
+
+    private static string Sub(string directory) => string.IsNullOrEmpty(directory) ? null : Path.Combine(directory, SubFolder);
+}
